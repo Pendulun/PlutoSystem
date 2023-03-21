@@ -1,2 +1,3 @@
-run:
-	npm start
+ci/check:
+# TODO
+	echo Successful

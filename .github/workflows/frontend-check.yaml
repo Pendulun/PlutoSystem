@@ -1,0 +1,16 @@
+on:
+  push:
+    paths:
+      - frontend/**
+      - .github/workflows/frontend-check.yaml
+  workflow_dispatch:
+
+jobs:
+  backend-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: make -C frontend ci/check

@@ -1,2 +1,2 @@
 ci/check:
-	cd pluto && poetry run pytest
+	make -C pluto ci/check
