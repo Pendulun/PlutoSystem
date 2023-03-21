@@ -1,0 +1,7 @@
+# This is a configuration example.
+#
+# --- DO NOT INCLUDE SENSITIVE INFORMATION IN THIS FILE ---
+#
+# TODO: teach the program how to read YAML configuration file. -aholmquist 2023-03-20
+port: 8057
+host: localhost
