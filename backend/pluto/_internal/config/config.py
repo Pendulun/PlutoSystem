@@ -16,7 +16,7 @@ class Config:
             raise InvalidConfigError("expected {} arguments, but got {}".format(
                 Config._REQUIRED_NUM_ARGS, len(cli_args)))
 
-        host = cli_arg[0]
-        port = int(cli_arg[1])
+        host = cli_args[0]
+        port = int(cli_args[1])
 
         return Config(host=host, port=port)

@@ -1,0 +1,12 @@
+on:
+  push:
+    paths:
+      - backend/**
+  workflow_dispatch:
+
+jobs:
+  backend-check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          make -C backend ci/check

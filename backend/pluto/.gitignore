@@ -1,0 +1,11 @@
+# Python stuff
+**.pyc
+
+# Pytest
+*__pycache__*
+
+# Jupyter
+.ipynb_checkpoints
+
+# venv
+venv
