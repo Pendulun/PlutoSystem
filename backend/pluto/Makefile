@@ -1,9 +1,19 @@
 install:
-	python -m pip install poetry poetry-core
-	python -m poetry config virtualenvs.in-project true
-	python -m poetry install
+	pip install poetry poetry-core
+	poetry config virtualenvs.in-project true
+	poetry install
 
-test:
-	python -m poetry run pytest
+lint:
+	poetry run black pluto
+	poetry run isort pluto
 
-ci/check: install test
+typecheck:
+	poetry run flake8 pluto
+	poetry run isort --check-only pluto
+	poetry run mypy pluto
+
+unittest:
+	poetry run pytest
+test: unittest
+
+ci/check: install typecheck test

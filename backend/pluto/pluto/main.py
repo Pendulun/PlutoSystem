@@ -1,9 +1,11 @@
 import sys
 
-from _internal.config.config import Config
-from _internal.log import log
+from pluto._internal.config.config import Config
+from pluto._internal.log import log
+from pluto._internal.server.server import Server
 
 logger = log.logger()
+
 
 def main():
     try:
@@ -19,5 +21,6 @@ def main():
         logger.critical(f"Unrecoverable error: {e}", exc_info=True)
         return
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
