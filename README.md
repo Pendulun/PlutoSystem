@@ -17,6 +17,23 @@ O PlutoSystem é um sistema de gerenciamento de finanças pessoais. Nesse sistem
 3. Banco de Dados: postgresql
 4. Framework para desenvolvimento frontend: React
 
+## Backlog do Produto
+
+1. Eu, como usuário, gostaria de adicionar despesas e receitas
+2. Eu, como usuário, gostaria de agrupar gastos por categorias ou tags
+3. Eu, como usuário, gostaria de adicionar fontes de renda
+4. Eu, como usuário, gostaria de definir metas de gastos e orçamentos
+5. Eu, como usuário, gostaria de ver estatísticas básicas sobre os meus gastos
+6. Eu, como usuário, gostaria de definir gastos ou despesas recorrentes mensais
+7. Eu, como usuário, gostaria de ver gráficos interativos sobre os meus gastos
+8. Eu, como usuário, gostaria de poder compartilhar uma visualização do meu estado financeiro
+9. Eu, como pessoa que recebi compartilhado a visualização de gastos de outra pessoa, gostaria de ver gráficos e estatísticas apropriados sobre o estado financeiro
+10. Eu, como usuário, gostaria de ter uma previsão sobre os meus gastos no próximo mês
+11. Eu, como usuário, gostaria de associar minhas contas em bancos
+12. Eu, como usuário, gostaria de me cadastrar e ter um perfil
+13. Eu, como usuário, gostaria de importar meus gastos e receitas por meio de um arquivo csv
+14. Eu, como usuário, gostaria de exportar meus gastos e receitas por meio de um arquivo csv
+
 ## Backlog da Sprint
 
 1. Eu, como usuário, gostaria de adicionar despesas e receitas
@@ -52,14 +69,3 @@ O PlutoSystem é um sistema de gerenciamento de finanças pessoais. Nesse sistem
     - Criar rota que recebe arquivo de receita e o processa
     - Criar lógica de preocessamento de arquivo de despesas
     - Criar rota que recebe arquivo de despesa e o processa
-
-## Backlog do Produto
-
-1. Eu, como usuário, gostaria de adicionar fontes de renda
-2. Eu, como usuário, gostaria de definir metas de gastos e orçamentos
-3. Eu, como usuário, gostaria de definir gastos ou despesas recorrentes mensais
-4. Eu, como usuário, gostaria de poder compartilhar uma visualização do meu estado financeiro
-5. Eu, como pessoa que recebi compartilhado a visualização de gastos de outra pessoa, gostaria de ver gráficos e estatísticas apropriados sobre o estado financeiro
-6. Eu, como usuário, gostaria de ter uma previsão sobre os meus gastos no próximo mês
-7. Eu, como usuário, gostaria de associar minhas contas em bancos
-8. Eu, como usuário, gostaria de exportar meus gastos e receitas por meio de um arquivo csv
