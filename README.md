@@ -37,35 +37,35 @@ O PlutoSystem é um sistema de gerenciamento de finanças pessoais. Nesse sistem
 ## Backlog da Sprint
 
 1. Eu, como usuário, gostaria de adicionar despesas e receitas
-    - Criar banco de dados e tabelas necessárias
+    - Criar banco de dados e tabelas necessárias **(Alex)**
+    - Criar rota para recuperação de despesas e receitas usando o Flask **(Alex)**
     - Criar versão inicial da tela inicial (Tela 'A' com menor granularidade) **(Lana)**
-    - Criar rota para recuperação de despesas e receitas usando o Flask
+    - Criar rota para cadastro de despesas com o Flask **(Daniel)**
+    - Criar rota para cadastro de receitas com o Flask **(Daniel)**
     - Adaptar tela inicial (Tela 'A') para poder adicionar despesas e receitas **(Lana)**
-    - Criar rota para cadastro de despesas com o Flask
-    - Criar rota para cadastro de receitas com o Flask
 2. Eu, como usuário, gostaria de agrupar gastos por categorias ou tags
-    - Adicionar opção de edição para adicionar/remover/alterar tags na tela inicial (Tela 'A') **(Letícia)**
-    - Criar rota para edição de tags de um gasto com o Flask
-    - Criar qualquer tabela necessária para as tags no banco de dados
+    - Adicionar opções de adicionar/remover/alterar tags na tela inicial (Tela 'A') **(Letícia)**
+    - Criar qualquer tabela necessária para as tags no banco de dados **(Daniel)**
+    - Criar rotas para adicionar/remover/alterar tags de um gasto com o Flask **(Letícia)**
     - Adaptar tela com visualização de gastos (Tela 'A') para poder filtrar gastos por tags **(Lana)**
-    - Criar rota de recuperação de gastos do usuário com uma tag com o Flask
+    - Criar rota de recuperação de gastos do usuário filtrando por tag com o Flask **(Alex)**
 3. Eu, como usuário, gostaria de ver estatísticas básicas sobre os meus gastos
     - Criar versão inicial tela de visualização de informações dos gastos (Tela 'B' com maior granularidade) **(Letícia)**
-    - Criar lógica que computa as estatísticas sobre os gastos
-    - Criar rota que retorna algumas estatísticas sobre os gastos com o Flask
+    - Criar lógica que computa as estatísticas sobre os gastos **(Alex)**
+    - Criar rota que retorna algumas estatísticas sobre os gastos com o Flask **(Letícia)**
 4. Eu, como usuário, gostaria de ver gráficos interativos sobre os meus gastos
     - Adaptar tela de visualização de informações dos gastos (Tela 'B') para poder receber alguns gráficos **(Lana)**
-    - Criar lógica que gera os gráficos interativos usando o Dash
-    - Criar rota que retorne os gráficos interativos
+    - Criar lógica que gera os gráficos interativos usando o Dash **(Daniel)**
+    - Criar rota que retorne os gráficos interativos **(Daniel)**
 5. Eu, como usuário, gostaria de me cadastrar e ter um perfil
     - Criar tela de cadastro de usuário **(Letícia)**
-    - Criar tabelas necessárias no banco de dados
-    - Criar rota de cadastro de usuário
+    - Criar tabelas necessárias no banco de dados **(Alex)**
+    - Criar rota de cadastro de usuário **(Alex)**
+    - Criar rota que retorne as informações do usuário **(Lana)**
     - Criar versão inicial da tela de perfil de usuário com algumas informações básicas **(Letícia)**
-    - Criar rota que retorne as informações do usuário
 6. Eu, como usuário, gostaria de importar meus gastos e receitas por meio de um arquivo csv
     - Alterar a tela inicial de visualização de gastos e receitas (Tela 'A') para poder importar por arquivo **(Lana)**
-    - Criar lógica de processamento de arquivo de receitas
-    - Criar rota que recebe arquivo de receita e o processa
-    - Criar lógica de preocessamento de arquivo de despesas
-    - Criar rota que recebe arquivo de despesa e o processa
+    - Criar lógica de processamento de arquivo de receitas **(Daniel)**
+    - Criar rota que recebe arquivo de receita e o processa **(Daniel)**
+    - Criar lógica de preocessamento de arquivo de despesas **(Alex)**
+    - Criar rota que recebe arquivo de despesa e o processa **(Alex)**
