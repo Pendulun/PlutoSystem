@@ -27,12 +27,14 @@ O PlutoSystem é um sistema de gerenciamento de finanças pessoais. Nesse sistem
 6. Eu, como usuário, gostaria de definir gastos ou despesas recorrentes mensais
 7. Eu, como usuário, gostaria de ver gráficos interativos sobre os meus gastos
 8. Eu, como usuário, gostaria de poder compartilhar uma visualização do meu estado financeiro
-9. Eu, como pessoa que recebi compartilhado a visualização de gastos de outra pessoa, gostaria de ver gráficos e estatísticas apropriados sobre o estado financeiro
+9. Eu, como quem recebeu compartilhado a visualização das finanças de outra pessoa, gostaria de ver gráficos e estatísticas apropriados sobre o estado financeiro dela
 10. Eu, como usuário, gostaria de ter uma previsão sobre os meus gastos no próximo mês
 11. Eu, como usuário, gostaria de associar minhas contas em bancos
 12. Eu, como usuário, gostaria de me cadastrar e ter um perfil
 13. Eu, como usuário, gostaria de importar meus gastos e receitas por meio de um arquivo csv
 14. Eu, como usuário, gostaria de exportar meus gastos e receitas por meio de um arquivo csv
+15. Eu, como usuário, gostaria de criar um grupo em que vários usuários poderiam adicionar despesas e gastos contidos no próprio grupo
+16. Eu, como usuário, gostaria de poder replicar um gasto ou receita adicionado em um grupo na minha parte financeira pessoal
 
 ## Backlog da Sprint
 
