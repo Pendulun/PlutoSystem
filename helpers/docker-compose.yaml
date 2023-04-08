@@ -1,0 +1,48 @@
+version: '3'
+
+# Required env variables:
+#
+# - DB_USER
+# - DB_PASSWORD
+#
+# Optional env variables:
+#
+# - PLUTO_TEST
+
+services:
+  pluto_pg:
+    container_name: pluto_pg
+    image: postgres:15.2
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  pluto_db_bootstrap:
+    container_name: pluto_db_bootstrap
+    image: db-bootstrap:latest
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      PLUTO_TEST: ${PLUTO_TEST:-true}
+    restart: on-failure
+    depends_on:
+      - pluto_pg
+    networks:
+      - postgres
+    links:
+      - pluto_pg
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+    postgres:
