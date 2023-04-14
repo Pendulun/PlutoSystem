@@ -7,7 +7,7 @@ lint:
 	poetry run black pluto
 	poetry run isort pluto
 
-typecheck:
+lint-check:
 	poetry run flake8 pluto
 	poetry run isort --check-only pluto
 	poetry run mypy pluto
@@ -16,4 +16,4 @@ unittest:
 	poetry run pytest
 test: unittest
 
-ci/check: install typecheck test
+ci/check: install lint-check test

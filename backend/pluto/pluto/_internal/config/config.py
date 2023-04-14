@@ -7,8 +7,10 @@ from pluto._internal.config.error import InvalidConfigError
 class Config:
     host: str
     port: int
+    dbhost: str
+    dbport: int
 
-    _REQUIRED_NUM_ARGS = 2
+    _REQUIRED_NUM_ARGS = 4
 
     @staticmethod
     def parse(cli_args: list[str]) -> "Config":
@@ -22,5 +24,12 @@ class Config:
 
         host = cli_args[0]
         port = int(cli_args[1])
+        dbhost = cli_args[2]
+        dbport = int(cli_args[3])
 
-        return Config(host=host, port=port)
+        return Config(
+            host=host,
+            port=port,
+            dbhost=dbhost,
+            dbport=dbport,
+        )
