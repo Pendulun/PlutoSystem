@@ -8,7 +8,7 @@ lint:
 	poetry run isort pluto
 
 lint-check:
-	poetry run flake8 pluto
+	poetry run flake8 --ignore=E501,W503 pluto
 	poetry run isort --check-only pluto
 	poetry run mypy pluto
 
@@ -16,4 +16,5 @@ unittest:
 	poetry run pytest
 test: unittest
 
-ci/check: install lint-check test
+check: lint-check test
+ci/check: install check

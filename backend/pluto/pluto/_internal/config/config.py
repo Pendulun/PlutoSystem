@@ -1,35 +1,39 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from os import environ
 
-from pluto._internal.config.error import InvalidConfigError
+from pluto._internal.utils.dataclass import validate_non_empty_string
 
 
 @dataclass
 class Config:
-    host: str
-    port: int
-    dbhost: str
-    dbport: int
-
-    _REQUIRED_NUM_ARGS = 4
+    host: str = field(
+        default="localhost", metadata={"validate": validate_non_empty_string}
+    )
+    port: int = 8057
+    dbuser: str = field(default="", metadata={"validate": validate_non_empty_string})
+    dbpassword: str = field(
+        default="", metadata={"validate": validate_non_empty_string}
+    )
+    dbhost: str = field(default="", metadata={"validate": validate_non_empty_string})
+    dbport: int = 5432
+    dbname: str = field(default="", metadata={"validate": validate_non_empty_string})
 
     @staticmethod
-    def parse(cli_args: list[str]) -> "Config":
-        # Currently we require CLI arguments for simplicity.
-        if len(cli_args) != Config._REQUIRED_NUM_ARGS:
-            raise InvalidConfigError(
-                "expected {} arguments, but got {}".format(
-                    Config._REQUIRED_NUM_ARGS, len(cli_args)
-                )
-            )
-
-        host = cli_args[0]
-        port = int(cli_args[1])
-        dbhost = cli_args[2]
-        dbport = int(cli_args[3])
+    def parse() -> "Config":
+        host = environ["HOST"]
+        port = int(environ["PORT"])
+        dbuser = environ["DBUSER"]
+        dbpassword = environ["DBPASSWORD"]
+        dbhost = environ["DBHOST"]
+        dbport = int(environ["DBPORT"])
+        dbname = environ["DBNAME"]
 
         return Config(
             host=host,
             port=port,
+            dbuser=dbuser,
+            dbpassword=dbpassword,
             dbhost=dbhost,
             dbport=dbport,
+            dbname=dbname,
         )
