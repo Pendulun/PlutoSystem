@@ -1,3 +1,5 @@
+PYTEST_FLAGS ?=
+
 install:
 	pip install poetry poetry-core
 	poetry config virtualenvs.in-project true
@@ -13,7 +15,7 @@ lint-check:
 	poetry run mypy pluto
 
 unittest:
-	poetry run pytest
+	poetry run pytest $(PYTEST_FLAGS)
 test: unittest
 
 check: lint-check test

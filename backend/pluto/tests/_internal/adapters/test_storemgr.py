@@ -1,5 +1,3 @@
-from unittest import mock
-
 import psycopg2
 import pytest
 

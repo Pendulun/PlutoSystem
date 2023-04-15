@@ -1,6 +1,8 @@
 import os
 from unittest.mock import Mock, patch
 
+import testing.postgresql
+from sqlalchemy import create_engine
 import psycopg2
 import pytest
 
@@ -27,31 +29,6 @@ def basic_config(basic_envvars):
 
 @pytest.fixture
 def mock_dbconnect():
-    # class Connection:
-
-    #     def __init__(self, expected_query: str, expected_rows: list[list[str]]):
-    #         self.expected_query = expected_query
-    #         self.expected_rows = expected_rows
-
-    #     class Cursor:
-    #         def __init__(self, conn):
-    #             self._conn = conn
-
-    #         def execute(self, query: str):
-    #             if query == self._conn.expected_query:
-    #                 return
-    #             raise ValueError(f"Cursor received unexpected query {query}")
-
-    #         def fetchall(self) -> list[list[str]]:
-    #             return self._conn.expected_rows
-
-    #     def cursor(self):
-    #         return Cursor(self)
-
-    #     def commit(self):
-    #         pass
-    # return lambda query, expected_rows: Connection(query, expected_rows)
-
     with patch("psycopg2.connect") as mock_connect:
         def mock_func(expected_query, expected_rows):
             mock_cursor = Mock()
@@ -73,3 +50,28 @@ def mock_dbconnect():
             return mock_assert
 
         yield mock_func
+
+# setup_real_pg sets up a PG instance in a temp dir for integration testing.
+@pytest.fixture
+def setup_real_pg():
+    with testing.postgresql.Postgresql() as postgresql:
+        create_engine(postgresql.url())
+        print(postgresql.url())
+        print(postgresql.dsn())
+        yield postgresql
+
+@pytest.fixture
+def putin_user():
+    return dict(
+        id="putin",
+        first_name="vladimir",
+        last_name="putin",
+    )
+
+@pytest.fixture
+def bj_user():
+    return dict(
+        id="bj",
+        first_name="b",
+        last_name="j",
+    )

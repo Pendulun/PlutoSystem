@@ -36,11 +36,12 @@ class StorageManager:
         cur = self._conn.cursor()
         cur.execute(q)
         self._conn.commit()
-        rows = []
+        rows_clean: list[tuple[str]] = []
         if "SELECT" in q and cur.rowcount > 0:
             rows = cur.fetchall()
+            rows_clean = list(map(lambda r: tuple(map(lambda s: s.strip(), r)), rows))  # type: ignore
         cur.close()
-        return rows
+        return rows_clean
 
     def connect(self):
         logger.debug(f"Connecting to {self._cfg.dbname}")
