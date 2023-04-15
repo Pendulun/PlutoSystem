@@ -56,6 +56,7 @@ def mock_dbconnect():
         def mock_func(expected_query, expected_rows):
             mock_cursor = Mock()
             mock_cursor.fetchall.return_value = expected_rows
+            mock_cursor.rowcount = len(expected_rows)
             mock_conn = Mock()
             mock_conn.cursor.return_value = mock_cursor
             mock_connect.return_value = mock_conn
@@ -66,7 +67,7 @@ def mock_dbconnect():
                 mock_conn.cursor.assert_called_once()
                 mock_cursor.execute.assert_called_once_with(expected_query)
 
-                if expected_query.startswith("SELECT"):
+                if expected_query.startswith("SELECT") and len(expected_rows) > 0:
                     mock_cursor.fetchall.assert_called_once()
 
             return mock_assert

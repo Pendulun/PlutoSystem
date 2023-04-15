@@ -54,13 +54,13 @@ class StorageManager:
     ################################################################
 
     # drop_table drops a SQL database table if it exists. Useful for testing.
-    def drop_table(self, tname: str):
-        self.query(f"DROP TABLE IF EXISTS {tname}")
+    def drop_table(self, table: str):
+        self.query(f"DROP TABLE IF EXISTS {table}")
 
     # creates_table drops a SQL database table if it does not exist. Useful for
     # testing.
-    def create_table(self, tname: str, coldef: dict[str, str]):
-        q = f"CREATE TABLE IF NOT EXISTS {tname}"
+    def create_table(self, table: str, coldef: dict[str, str]):
+        q = f"CREATE TABLE IF NOT EXISTS {table}"
         q += "("
         for colName, colType in zip(coldef.keys(), coldef.values()):
             q += "{} {},".format(colName, colType)
@@ -69,16 +69,16 @@ class StorageManager:
         self.query(q)
 
     # ping_table raises exception if table does not exist. Useful for testing.
-    def ping_table(self, tname: str):
-        self.query(f"SELECT * from {tname} LIMIT 0")
+    def ping_table(self, table: str):
+        self.query(f"SELECT * FROM {table} LIMIT 0")
 
     # select_start selects all elements of a table. Useful mainly for testing.
-    def select_star(self, tname: str):
-        return self.query(f"SELECT * FROM {tname}")
+    def select_star(self, table: str):
+        return self.query(f"SELECT * FROM {table}")
 
     # select_star_where_equal selects all elements that match given conditions.
-    def select_star_where_equal(self, tname: str, conditions: dict[str, str]):
-        q = "SELECT * FROM {} WHERE ".format(tname)
+    def select_star_where_equal(self, table: str, conditions: dict[str, str]):
+        q = "SELECT * FROM {} WHERE ".format(table)
         condkeys = conditions.keys()
         for i, k, v in zip(range(len(condkeys)), condkeys, conditions.values()):
             if i > 0:
