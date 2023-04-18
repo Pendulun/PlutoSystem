@@ -58,8 +58,8 @@ class StorageManager:
     def drop_table(self, table: str):
         self.query(f"DROP TABLE IF EXISTS {table}")
 
-    # creates_table drops a SQL database table if it does not exist. Useful for
-    # testing.
+    # creates_table creates a SQL database table if it does not exist. Useful
+    # for testing.
     def create_table(self, table: str, coldef: dict[str, str]):
         q = f"CREATE TABLE IF NOT EXISTS {table}"
         q += "("

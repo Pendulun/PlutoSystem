@@ -15,7 +15,3 @@ class User:
     def new(first_name: str, last_name: str) -> "User":
         # TODO: validate names -aholmquist 2023-04-14
         return User(new_id(), first_name, last_name)
-
-    @staticmethod
-    def table() -> str:
-        return "users"
