@@ -36,3 +36,18 @@ class TestStorageManager:
         storemgr.close_conn()
         ass()
         assert res == expected_rows
+
+    def test_select_star_where_equal(self, storemgr, mock_dbconnect):
+        expected_query = ("SELECT * FROM users WHERE id = 'bg' AND "+
+                          "first_name = 'billy' ")
+        expected_rows = [('bg', 'billy', 'graham')]
+        ass = mock_dbconnect(
+            expected_query=expected_query,
+            expected_rows=expected_rows,
+        )
+        storemgr.connect()
+        res = storemgr.select_star_where_equal(
+            "users", {"id": "bg", "first_name": "billy"})
+        storemgr.close_conn()
+        ass()
+        assert res == expected_rows

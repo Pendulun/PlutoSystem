@@ -78,11 +78,13 @@ class StorageManager:
         return self.query(f"SELECT * FROM {table}")
 
     # select_star_where_equal selects all elements that match given conditions.
-    def select_star_where_equal(self, table: str, conditions: dict[str, str]):
+    def select_star_where_equal(self, table: str, and_conditions: dict[str, str]):
         q = "SELECT * FROM {} WHERE ".format(table)
-        condkeys = conditions.keys()
-        for i, k, v in zip(range(len(condkeys)), condkeys, conditions.values()):
-            if i > 0:
+        condkeys = and_conditions.keys()
+        for i, k, v in zip(range(len(condkeys)), condkeys, and_conditions.values()):
+            if i == 0:
+                q += "{} = {} ".format(k, self._fmtsqllit(v))
+            else:
                 q += "AND {} = {} ".format(k, self._fmtsqllit(v))
         return self.query(q)
 
