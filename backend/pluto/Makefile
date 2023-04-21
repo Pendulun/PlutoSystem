@@ -1,3 +1,5 @@
+PYTEST_FLAGS ?=
+
 install:
 	pip install poetry poetry-core
 	poetry config virtualenvs.in-project true
@@ -7,13 +9,14 @@ lint:
 	poetry run black pluto
 	poetry run isort pluto
 
-typecheck:
-	poetry run flake8 pluto
+lint-check:
+	poetry run flake8 --ignore=E501,W503 pluto
 	poetry run isort --check-only pluto
 	poetry run mypy pluto
 
 unittest:
-	poetry run pytest
+	poetry run pytest $(PYTEST_FLAGS)
 test: unittest
 
-ci/check: install typecheck test
+check: lint-check test
+ci/check: install check
