@@ -37,3 +37,15 @@ class Config:
             dbport=dbport,
             dbname=dbname,
         )
+
+    def as_dict(self) -> dict:
+        config_dict={
+            'host': self.host,
+            'port': self.port,
+            'dbuser': self.dbuser,
+            'dbpassword': self.dbpassword,
+            'dbhost': self.dbhost,
+            'dbport': self.dbport,
+            'dbname': self.dbname
+        }
+        return config_dict
