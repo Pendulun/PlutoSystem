@@ -2,7 +2,7 @@ import sys
 
 from pluto._internal.config.config import Config
 from pluto._internal.log import log
-from pluto._internal.server.server import Server
+from pluto._internal.server.server import make_server, ServerType
 
 logger = log.logger()
 
@@ -10,8 +10,9 @@ logger = log.logger()
 def main():
     try:
         try:
-            config = Config.parse(sys.argv[1:])
-            server = Server(config)
+            config = Config.parse()
+            server_type = ServerType.FLASK
+            server = make_server(server_type, config)
         except Exception as e:
             logger.critical(f"Failed to initialize server: {e}", exc_info=True)
             return
