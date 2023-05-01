@@ -16,13 +16,15 @@ services:
     environment:
       HOST: ${HOST}
       PORT: ${PORT}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
+      DBUSER: ${DB_USER}
+      DBPASSWORD: ${DB_PASSWORD}
+      DBHOST: ${DB_HOST}
+      DBPORT: ${DB_PORT}
+      DBNAME: ${DB_NAME}
     ports:
       - "5000:5000"
+    networks:
+      - postgres
 
   pluto_pg:
     container_name: pluto_pg
