@@ -10,22 +10,6 @@ version: '3'
 # - PLUTO_TEST
 
 services:
-  webapp:
-    container_name: web_app
-    image: server:latest
-    environment:
-      HOST: ${HOST}
-      PORT: ${PORT}
-      DBUSER: ${DB_USER}
-      DBPASSWORD: ${DB_PASSWORD}
-      DBHOST: ${DB_HOST}
-      DBPORT: ${DB_PORT}
-      DBNAME: ${DB_NAME}
-    ports:
-      - "5000:5000"
-    networks:
-      - postgres
-
   pluto_pg:
     container_name: pluto_pg
     image: postgres:15.2
