@@ -1,5 +1,6 @@
 from __future__ import annotations
 from pluto._internal.config.config import Config
+from pluto._internal.domain.ports.database import Database
 
 import enum
 
@@ -9,11 +10,11 @@ class ServerTypeError(Exception):
 class ServerType(enum.Enum):
     FLASK = 1
 
-def make_server(type:ServerType, config: Config) -> Server:
+def make_server(type:ServerType, config: Config, database:Database) -> Server:
     if type == ServerType.FLASK:
         #Only import if needed
         from pluto._internal.server.flask_server import make_flask_server
-        return make_flask_server(config)
+        return make_flask_server(config, database)
     else:
         raise ServerTypeError("Server Type not defined!")
 

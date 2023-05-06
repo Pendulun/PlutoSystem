@@ -87,7 +87,7 @@ class PGSQLStorageManager(SQLStorageManager):
             self._cfg.dbport,
             self._cfg.dbname,
         )
-
+    # Methods that must be overrided
     def query(self, q: str) -> list[Any]:
         logger.debug("Querying database with string: {}".format(q))
         cur = self._conn.cursor()
@@ -105,4 +105,5 @@ class PGSQLStorageManager(SQLStorageManager):
         self._conn = psycopg2.connect(self._connstr)
 
     def close_conn(self):
-        self._conn.close()
+        if self._conn:
+            self._conn.close()
