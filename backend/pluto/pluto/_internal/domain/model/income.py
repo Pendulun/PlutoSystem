@@ -16,3 +16,7 @@ class Income:
     def new(user_id: str, src: str, amount: int) -> "Income":
         # TODO: validate -aholmquist 2023-04-14
         return Income(new_id(), user_id, src, amount)
+
+    @staticmethod
+    def table():
+        return 'income'
