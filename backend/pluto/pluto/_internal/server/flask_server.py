@@ -8,6 +8,7 @@ from pluto._internal.domain.ports.database import Database
 from pluto._internal.domain.model.expense import Expense
 
 from typing import Callable
+import random
 import requests
 
 
@@ -46,7 +47,7 @@ class FlaskServerWrapper(Server):
     
     def _add_endpoints(self):
         self.add_endpoint('/action/<string:name>', 'action', self.action)
-        self.add_endpoint('/expenses/add/','add_expenses', self.add_expense, methods=['POST','GET'])
+        self.add_endpoint('/expenses/add/','add_expenses', self.add_expense, methods=['POST'])
         self.add_endpoint('/make_expense/', 'make_expense', self.request_add_random_expense)
 
     def add_endpoint(self, endpoint:str=None, endpoint_name:str=None, handler:Callable=None, methods:list=None, *args, **kwargs):
@@ -62,18 +63,19 @@ class FlaskServerWrapper(Server):
         return "Hello " + name
 
     def request_add_random_expense(self):
-        dictToSend = {'user_id':'2', 'src':'mercadao', 'amount':39.90}
+        dictToSend = {
+            'user_id':random.randint(0, 1000), 
+            'src':'mercadao', 
+            'amount':random.random()*100
+            }
         res = requests.post('http://localhost:5000/expenses/add/', json=dictToSend)
-        print(f"RES: {res.content}")
         return res.content
     
     def run(self, **kwargs):
         self.app.run(debug=True, **kwargs)
     
     def add_expense(self):
-        if request.method == 'POST':
-            expense_json = request.get_json(force=True) 
-            return expense_json
-        else:
-            base_expense = Expense.new('1', 'mercado', 32.1)
-            return str(base_expense)
+        expense_dict = request.get_json(force=True) 
+        new_expense = Expense.new(**expense_dict)
+        self.db.insert(Expense.table(), new_expense.dict())
+        return f"Inseriu {expense_dict} com sucesso!"
