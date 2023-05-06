@@ -2,12 +2,12 @@ import psycopg2
 import pytest
 
 
-from pluto._internal.adapters.storemgr import StorageManager
+from pluto._internal.adapters.storemgr import PGSQLStorageManager
 
 class TestStorageManager:
     @pytest.fixture
     def storemgr(self, basic_config):
-        return StorageManager(basic_config)
+        return PGSQLStorageManager(basic_config)
 
     def test_init(self, storemgr):
         pass

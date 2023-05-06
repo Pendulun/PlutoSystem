@@ -2,22 +2,22 @@ from typing import Any
 
 import psycopg2
 
+from pluto._internal.domain.ports.database import Database
 from pluto._internal.config.config import Config
 from pluto._internal.log import log
 
 logger = log.logger()
 
-
-class StorageManager:
+class SQLStorageManager(Database):
+    """
+    This is a base class for all databases that uses SQL language. 
+    It doesn't implements the following methods:
+    query(...)
+    connect(...)
+    close_conn(...)
+    """
     def __init__(self, cfg: Config) -> None:
-        self._cfg = cfg
-        self._connstr = "user={} password={} host={} port={} dbname={}".format(
-            cfg.dbuser,
-            cfg.dbpassword,
-            cfg.dbhost,
-            cfg.dbport,
-            cfg.dbname,
-        )
+        super().__init__(cfg)
 
     def insert(self, table: str, colvals: dict[str, Any]) -> list[Any]:
         if len(colvals) == 0:
@@ -30,25 +30,6 @@ class StorageManager:
         colstr = colstr[:-2]
         valstr = valstr[:-2]
         return self.query(f"INSERT INTO {table} ({colstr}) VALUES ({valstr})")
-
-    def query(self, q: str) -> list[Any]:
-        logger.debug("Querying database with string: {}".format(q))
-        cur = self._conn.cursor()
-        cur.execute(q)
-        self._conn.commit()
-        rows_clean: list[tuple[str]] = []
-        if "SELECT" in q and cur.rowcount > 0:
-            rows = cur.fetchall()
-            rows_clean = list(map(lambda r: tuple(map(lambda s: s.strip(), r)), rows))  # type: ignore
-        cur.close()
-        return rows_clean
-
-    def connect(self):
-        logger.debug(f"Connecting to {self._cfg.dbname}")
-        self._conn = psycopg2.connect(self._connstr)
-
-    def close_conn(self):
-        self._conn.close()
 
     ################################################################
     # Useful query patterns
@@ -95,3 +76,33 @@ class StorageManager:
             return f"'{val}'"
         else:
             return val
+    
+class PGSQLStorageManager(SQLStorageManager):
+    def __init__(self, cfg: Config) -> None:
+        super().__init__(cfg)
+        self._connstr = "user={} password={} host={} port={} dbname={}".format(
+            self._cfg.dbuser,
+            self._cfg.dbpassword,
+            self._cfg.dbhost,
+            self._cfg.dbport,
+            self._cfg.dbname,
+        )
+
+    def query(self, q: str) -> list[Any]:
+        logger.debug("Querying database with string: {}".format(q))
+        cur = self._conn.cursor()
+        cur.execute(q)
+        self._conn.commit()
+        rows_clean: list[tuple[str]] = []
+        if "SELECT" in q and cur.rowcount > 0:
+            rows = cur.fetchall()
+            rows_clean = list(map(lambda r: tuple(map(lambda s: s.strip(), r)), rows))  # type: ignore
+        cur.close()
+        return rows_clean
+
+    def connect(self):
+        logger.debug(f"Connecting to {self._cfg.dbname}")
+        self._conn = psycopg2.connect(self._connstr)
+
+    def close_conn(self):
+        self._conn.close()
