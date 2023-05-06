@@ -6,7 +6,7 @@ DB_HOST ?= localhost
 DB_USER ?= postgres
 DB_PASSWORD ?= changeme
 DB_NAME ?= pluto
-DB_PORT ?= 123
+DB_PORT ?= 5432
 HOST ?= localhost
 PORT ?= 5000
 BASE_SETENV = DB_USER=$(DB_USER) DB_PASSWORD=$(DB_PASSWORD)

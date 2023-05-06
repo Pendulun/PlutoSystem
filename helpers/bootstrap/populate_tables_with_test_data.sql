@@ -71,3 +71,11 @@ INSERT INTO income VALUES (
   'Presidential salary',
   5000
 );
+
+----Add expenses----
+INSERT INTO expense VALUES (
+'mercado',
+'daniel',
+'compras do mês',
+453.21
+);
