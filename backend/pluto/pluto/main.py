@@ -1,9 +1,9 @@
 import sys
 
+from pluto._internal.adapters.storemgr import PGSQLStorageManager
 from pluto._internal.config.config import Config, ConfigMock
 from pluto._internal.log import log
-from pluto._internal.server.server import make_server, ServerType
-from pluto._internal.adapters.storemgr import PGSQLStorageManager
+from pluto._internal.server.server import ServerType, make_server
 
 logger = log.logger()
 
@@ -25,6 +25,7 @@ def main():
         logger.critical(f"Unrecoverable error: {e}", exc_info=True)
     finally:
         database.close_conn()
+
 
 if __name__ == "__main__":
     main()

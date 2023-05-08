@@ -1,12 +1,14 @@
-from typing import Any
-from pluto._internal.config.config import Config
 from abc import ABC, abstractmethod
+from typing import Any
+
+from pluto._internal.config.config import Config
+
 
 class Database(ABC):
     def __init__(self, cfg: Config):
         self._cfg = cfg
         self._conn = None
-    
+
     @abstractmethod
     def insert(self, table: str, colvals: dict[str, Any]) -> list[Any]:
         pass
@@ -14,7 +16,7 @@ class Database(ABC):
     @abstractmethod
     def query(self, q: str) -> list[Any]:
         pass
-    
+
     @abstractmethod
     def connect(self):
         pass
@@ -30,7 +32,7 @@ class Database(ABC):
     @abstractmethod
     def create_table(self, table: str, coldef: dict[str, str]):
         pass
-    
+
     @abstractmethod
     def ping_table(self, table: str):
         pass

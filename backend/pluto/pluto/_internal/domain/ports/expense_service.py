@@ -1,5 +1,7 @@
-from pluto._internal.domain.ports.database import Database
 from abc import ABC, abstractmethod
+
+from pluto._internal.domain.ports.database import Database
+
 
 class IExpenseService(ABC):
     _expense_table = "expense"
@@ -8,5 +10,5 @@ class IExpenseService(ABC):
         self._sm = sm
 
     @abstractmethod
-    def add_expense(self, expense_dict:dict) -> None:
+    def add_expense(self, expense_dict: dict) -> None:
         pass

@@ -39,27 +39,28 @@ class Config:
         )
 
     def as_dict(self) -> dict:
-        config_dict={
-            'host': self.host,
-            'port': self.port,
-            'dbuser': self.dbuser,
-            'dbpassword': self.dbpassword,
-            'dbhost': self.dbhost,
-            'dbport': self.dbport,
-            'dbname': self.dbname
+        config_dict = {
+            "host": self.host,
+            "port": self.port,
+            "dbuser": self.dbuser,
+            "dbpassword": self.dbpassword,
+            "dbhost": self.dbhost,
+            "dbport": self.dbport,
+            "dbname": self.dbname,
         }
         return config_dict
+
 
 class ConfigMock(Config):
     @staticmethod
     def parse() -> "Config":
-        host = 'host'
+        host = "host"
         port = 123
-        dbuser = 'db_user'
-        dbpassword = 'password'
-        dbhost = 'db_host'
-        dbport = '42'
-        dbname = 'db_name'
+        dbuser = "db_user"
+        dbpassword = "password"
+        dbhost = "db_host"
+        dbport = "42"
+        dbname = "db_name"
 
         return Config(
             host=host,

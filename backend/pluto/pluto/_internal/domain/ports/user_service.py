@@ -1,5 +1,5 @@
-from pluto._internal.domain.ports.database import Database
 from pluto._internal.domain.model.user import User
+from pluto._internal.domain.ports.database import Database
 
 
 class UserService:

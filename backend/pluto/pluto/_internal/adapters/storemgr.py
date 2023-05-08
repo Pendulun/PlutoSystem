@@ -2,20 +2,22 @@ from typing import Any
 
 import psycopg2
 
-from pluto._internal.domain.ports.database import Database
 from pluto._internal.config.config import Config
+from pluto._internal.domain.ports.database import Database
 from pluto._internal.log import log
 
 logger = log.logger()
 
+
 class SQLStorageManager(Database):
     """
-    This is a base class for all databases that uses SQL language. 
+    This is a base class for all databases that uses SQL language.
     It doesn't implements the following methods:
     query(...)
     connect(...)
     close_conn(...)
     """
+
     def __init__(self, cfg: Config) -> None:
         super().__init__(cfg)
 
@@ -76,7 +78,8 @@ class SQLStorageManager(Database):
             return f"'{val}'"
         else:
             return val
-    
+
+
 class PGSQLStorageManager(SQLStorageManager):
     def __init__(self, cfg: Config) -> None:
         super().__init__(cfg)
@@ -87,6 +90,7 @@ class PGSQLStorageManager(SQLStorageManager):
             self._cfg.dbport,
             self._cfg.dbname,
         )
+
     # Methods that must be overrided
     def query(self, q: str) -> list[Any]:
         logger.debug("Querying database with string: {}".format(q))
