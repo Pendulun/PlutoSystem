@@ -1,7 +1,7 @@
 import sys
 
 from pluto._internal.adapters.storemgr import PGSQLStorageManager
-from pluto._internal.config.config import Config, ConfigMock
+from pluto._internal.config.config import Config
 from pluto._internal.log import log
 from pluto._internal.server.server import ServerType, make_server
 
