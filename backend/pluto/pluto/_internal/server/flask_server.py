@@ -7,6 +7,7 @@ from pluto._internal.server.server import Server
 from pluto._internal.domain.ports.database import Database
 from pluto._internal.domain.model.income import Income
 from pluto._internal.adapters.expense_service import ExpenseServiceImpl
+from pluto._internal.adapters.income_service import IncomeServiceImpl
 
 from typing import Callable
 import random
@@ -97,6 +98,6 @@ class FlaskServerWrapper(Server):
 
     def add_income(self):
         income_dict = request.get_json(force=True) 
-        new_income = Income.new(**income_dict)
-        self.db.insert(Income.table(), new_income.dict())
-        return f"Inseriu {new_income} com sucesso!"
+        income_service = IncomeServiceImpl(self.db)
+        income_service.add_income(income_dict)
+        return f"Inseriu {income_dict} com sucesso!"
