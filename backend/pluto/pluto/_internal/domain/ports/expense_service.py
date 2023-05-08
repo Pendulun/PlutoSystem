@@ -8,5 +8,5 @@ class IExpenseService(ABC):
         self._sm = sm
 
     @abstractmethod
-    def add_expense(self, user_dict:dict) -> None:
+    def add_expense(self, expense_dict:dict) -> None:
         pass

@@ -7,6 +7,6 @@ class ExpenseServiceImpl(IExpenseService):
     def __init__(self, sm: Database) -> None:
         super().__init__(sm)
 
-    def add_expense(self, user_dict:dict) -> None:
-        expense = Expense.new(**user_dict)
+    def add_expense(self, expense_dict:dict) -> None:
+        expense = Expense.new(**expense_dict)
         self._sm.insert(ExpenseServiceImpl._expense_table, expense.dict())
