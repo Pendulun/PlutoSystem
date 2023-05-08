@@ -5,8 +5,8 @@ from flask import Flask, request, make_response
 from pluto._internal.config.config import Config
 from pluto._internal.server.server import Server
 from pluto._internal.domain.ports.database import Database
-from pluto._internal.domain.model.expense import Expense
 from pluto._internal.domain.model.income import Income
+from pluto._internal.adapters.expense_service import ExpenseServiceImpl
 
 from typing import Callable
 import random
@@ -91,8 +91,8 @@ class FlaskServerWrapper(Server):
     
     def add_expense(self):
         expense_dict = request.get_json(force=True) 
-        new_expense = Expense.new(**expense_dict)
-        self.db.insert(Expense.table(), new_expense.dict())
+        expense_service = ExpenseServiceImpl(self.db)
+        expense_service.add_expense(expense_dict)
         return f"Inseriu {expense_dict} com sucesso!"
 
     def add_income(self):
