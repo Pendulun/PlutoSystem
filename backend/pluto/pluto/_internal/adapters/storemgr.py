@@ -94,15 +94,20 @@ class PGSQLStorageManager(SQLStorageManager):
     # Methods that must be overrided
     def query(self, q: str) -> list[Any]:
         logger.debug("Querying database with string: {}".format(q))
-        cur = self._conn.cursor()
-        cur.execute(q)
-        self._conn.commit()
-        rows_clean: list[tuple[str]] = []
-        if "SELECT" in q and cur.rowcount > 0:
-            rows = cur.fetchall()
-            rows_clean = list(map(lambda r: tuple(map(lambda s: s.strip(), r)), rows))  # type: ignore
-        cur.close()
-        return rows_clean
+        if self._conn:
+            cur = self._conn.cursor()
+            cur.execute(q)
+            self._conn.commit()
+            rows_clean: list[tuple[str]] = []
+            if "SELECT" in q and cur.rowcount > 0:
+                rows = cur.fetchall()
+                rows_clean = list(map(lambda r: tuple(map(lambda s: s.strip(), r)), rows))  # type: ignore
+            cur.close()
+            return rows_clean
+        else:
+            raise ValueError(
+                "Database has no connection! Must explicit call connect() before queries!"
+            )
 
     def connect(self):
         logger.debug(f"Connecting to {self._cfg.dbname}")

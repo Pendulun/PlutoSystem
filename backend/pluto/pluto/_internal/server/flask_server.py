@@ -9,7 +9,6 @@ from flask import Flask, make_response, request
 from pluto._internal.adapters.expense_service import ExpenseServiceImpl
 from pluto._internal.adapters.income_service import IncomeServiceImpl
 from pluto._internal.config.config import Config
-from pluto._internal.domain.model.income import Income
 from pluto._internal.domain.ports.database import Database
 from pluto._internal.server.server import Server
 
@@ -41,8 +40,8 @@ class FlaskServerWrapper(Server):
         self._add_endpoints()
 
     def configs(self, config: Config):
-        for config, value in config.as_dict().items():
-            self.app.config[config.upper()] = value
+        for config_name, value in config.as_dict().items():
+            self.app.config[config_name.upper()] = value
 
     def _add_endpoints(self):
         # example endpoint
@@ -64,10 +63,10 @@ class FlaskServerWrapper(Server):
 
     def add_endpoint(
         self,
-        endpoint: str = None,
-        endpoint_name: str = None,
-        handler: Callable = None,
-        methods: list = None,
+        endpoint: str,
+        endpoint_name: str,
+        handler: Callable,
+        methods: list = ["GET"],
         *args,
         **kwargs,
     ):

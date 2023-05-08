@@ -59,7 +59,7 @@ class ConfigMock(Config):
         dbuser = "db_user"
         dbpassword = "password"
         dbhost = "db_host"
-        dbport = "42"
+        dbport = 42
         dbname = "db_name"
 
         return Config(
