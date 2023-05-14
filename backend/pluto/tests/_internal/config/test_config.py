@@ -4,6 +4,26 @@ import pytest
 
 from pluto._internal.config.config import Config
 
+class ConfigMock(Config):
+    @staticmethod
+    def parse() -> "Config":
+        host = "host"
+        port = 123
+        dbuser = "db_user"
+        dbpassword = "password"
+        dbhost = "db_host"
+        dbport = 42
+        dbname = "db_name"
+
+        return Config(
+            host=host,
+            port=port,
+            dbuser=dbuser,
+            dbpassword=dbpassword,
+            dbhost=dbhost,
+            dbport=dbport,
+            dbname=dbname,
+        )
 
 class TestConfig:
     def test_parse_not_all_set(self, empty_envvars):
