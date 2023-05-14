@@ -48,17 +48,10 @@ class FlaskServerWrapper(Server):
         self.add_endpoint("/action/<string:name>", "action", self.action)
 
         self.add_endpoint(
-            "/expenses/add/", "add_expenses", self.add_expense, methods=["POST"]
+            "/expenses/", "add_expenses", self.add_expense, methods=["POST"]
         )
         self.add_endpoint(
-            "/incomes/add/", "add_income", self.add_income, methods=["POST"]
-        )
-        # testing functions
-        self.add_endpoint(
-            "/make_expense/", "make_expense", self.request_add_random_expense
-        )
-        self.add_endpoint(
-            "/make_income/", "make_income", self.request_add_random_income
+            "/incomes/", "add_income", self.add_income, methods=["POST"]
         )
 
     def add_endpoint(
@@ -88,26 +81,6 @@ class FlaskServerWrapper(Server):
         This function takes `name` argument and returns `Hello <name>`.
         """
         return "Hello " + name
-
-    # testing methods
-    def request_add_random_expense(self):
-        dictToSend = {
-            "user_id": random.randint(0, 1000),
-            "src": "mercadao",
-            "amount": random.random() * 100,
-        }
-        res = requests.post("http://localhost:5000/expenses/add/", json=dictToSend)
-        return res.content
-
-    def request_add_random_income(self):
-        dictToSend = {
-            "user_id": random.randint(0, 1000),
-            "src": "salario",
-            "amount": random.random() * 10000,
-        }
-        print("chegou aqui ")
-        res = requests.post("http://localhost:5000/incomes/add/", json=dictToSend)
-        return res.content
 
     def run(self, **kwargs):
         self.app.run(debug=True, **kwargs)
