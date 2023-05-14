@@ -114,5 +114,8 @@ class PGSQLStorageManager(SQLStorageManager):
         self._conn = psycopg2.connect(self._connstr)
 
     def close_conn(self):
+        self.__del__()
+    
+    def __del__(self):
         if self._conn:
             self._conn.close()
