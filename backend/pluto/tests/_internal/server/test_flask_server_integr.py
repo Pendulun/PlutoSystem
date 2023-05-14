@@ -67,13 +67,22 @@ class TestFlaskServer:
             "/make_income/", "make_income", self.request_add_random_income
         )
 
+        self.server.add_endpoint("/action/<string:name>", "action", self.action)
+
         self.server.run()
 
     def down(self):
         #Eu só achei um jeito de desligar o servidor: apertando ctr+c
         pass
 
-    # testing methods
+    # testing reqs
+
+    def action(self, name):
+        """
+        This function takes `name` argument and returns `Hello <name>`.
+        """
+        return "Hello " + name
+    
     def request_add_random_expense(self):
         dictToSend = {
             "user_id": random.randint(0, 1000),

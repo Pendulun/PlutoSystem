@@ -44,8 +44,6 @@ class FlaskServerWrapper(Server):
             self.app.config[config_name.upper()] = value
 
     def _add_endpoints(self):
-        # example endpoint
-        self.add_endpoint("/action/<string:name>", "action", self.action)
 
         self.add_endpoint(
             "/expenses/", "add_expenses", self.add_expense, methods=["POST"]
@@ -74,13 +72,6 @@ class FlaskServerWrapper(Server):
             *args,
             **kwargs,
         )
-
-    # example action
-    def action(self, name):
-        """
-        This function takes `name` argument and returns `Hello <name>`.
-        """
-        return "Hello " + name
 
     def run(self, **kwargs):
         self.app.run(debug=True, **kwargs)
