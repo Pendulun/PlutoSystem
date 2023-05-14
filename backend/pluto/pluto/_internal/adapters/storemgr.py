@@ -115,7 +115,7 @@ class PGSQLStorageManager(SQLStorageManager):
 
     def close_conn(self):
         self.__del__()
-    
+
     def __del__(self):
         if self._conn:
             self._conn.close()

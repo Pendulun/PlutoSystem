@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import random
 from typing import Callable
 
-import requests
 from flask import Flask, make_response, request
 
 from pluto._internal.adapters.expense_service import ExpenseServiceImpl
@@ -44,13 +42,10 @@ class FlaskServerWrapper(Server):
             self.app.config[config_name.upper()] = value
 
     def _add_endpoints(self):
-
         self.add_endpoint(
             "/expenses/", "add_expenses", self.add_expense, methods=["POST"]
         )
-        self.add_endpoint(
-            "/incomes/", "add_income", self.add_income, methods=["POST"]
-        )
+        self.add_endpoint("/incomes/", "add_income", self.add_income, methods=["POST"])
 
     def add_endpoint(
         self,
