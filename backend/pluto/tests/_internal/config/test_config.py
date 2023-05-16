@@ -4,7 +4,6 @@ import pytest
 
 from pluto._internal.config.config import Config
 
-
 class TestConfig:
     def test_parse_not_all_set(self, empty_envvars):
         environ["HOST"] = "localhost"

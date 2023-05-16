@@ -12,11 +12,11 @@ from pluto._internal.config.config import Config
 def basic_envvars():
     os.environ["HOST"] = "localhost"
     os.environ["PORT"] = "8999"
-    os.environ["DBHOST"] = "localhost"
-    os.environ["DBUSER"] = "pluto_dog"
-    os.environ["DBPASSWORD"] = "you-shall-not-pass"
-    os.environ["DBPORT"] = "1234"
-    os.environ["DBNAME"] = "pluto"
+    os.environ["DB_HOST"] = "localhost"
+    os.environ["DB_USER"] = "pluto_dog"
+    os.environ["DB_PASSWORD"] = "you-shall-not-pass"
+    os.environ["DB_PORT"] = "1234"
+    os.environ["DB_NAME"] = "pluto"
 
 @pytest.fixture
 def empty_envvars():

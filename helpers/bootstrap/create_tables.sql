@@ -10,3 +10,10 @@ create table if not exists income (
   src char(32),
   amount bigint
 );
+
+create table if not exists expense (
+  id char(32),
+  user_id char(32),
+  src char(32),
+  amount real
+);

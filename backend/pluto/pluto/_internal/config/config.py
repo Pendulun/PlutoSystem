@@ -22,11 +22,11 @@ class Config:
     def parse() -> "Config":
         host = environ["HOST"]
         port = int(environ["PORT"])
-        dbuser = environ["DBUSER"]
-        dbpassword = environ["DBPASSWORD"]
-        dbhost = environ["DBHOST"]
-        dbport = int(environ["DBPORT"])
-        dbname = environ["DBNAME"]
+        dbuser = environ["DB_USER"]
+        dbpassword = environ["DB_PASSWORD"]
+        dbhost = environ["DB_HOST"]
+        dbport = int(environ["DB_PORT"])
+        dbname = environ["DB_NAME"]
 
         return Config(
             host=host,
@@ -37,3 +37,15 @@ class Config:
             dbport=dbport,
             dbname=dbname,
         )
+
+    def as_dict(self) -> dict:
+        config_dict = {
+            "host": self.host,
+            "port": self.port,
+            "dbuser": self.dbuser,
+            "dbpassword": self.dbpassword,
+            "dbhost": self.dbhost,
+            "dbport": self.dbport,
+            "dbname": self.dbname,
+        }
+        return config_dict

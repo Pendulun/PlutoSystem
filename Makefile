@@ -1,20 +1,27 @@
 SHELL := bash
 
 HELPERS ?= ./helpers
+SERVER_DIR_PATH ?= ./backend/pluto/pluto/
 DB_HOST ?= localhost
 DB_USER ?= postgres
 DB_PASSWORD ?= changeme
 DB_NAME ?= pluto
-SETENV = DB_USER=$(DB_USER) DB_PASSWORD=$(DB_PASSWORD)
+DB_PORT ?= 5432
+HOST ?= localhost
+PORT ?= 5000
+BASE_SETENV = DB_USER=$(DB_USER) DB_PASSWORD=$(DB_PASSWORD)
+BOOTSTRAP_SETENV = $(BASE_SETENV)
+COMPLETE_SETENV = $(BASE_SETENV) HOST=$(HOST) PORT=$(PORT) DB_NAME=$(DB_NAME) DB_PORT=$(DB_PORT) DB_HOST=$(DB_HOST)
 
 _build_bootstrap_image:
-	$(SETENV) docker build \
+	$(BOOTSTRAP_SETENV) docker build \
 	  -f $(HELPERS)/bootstrap/Dockerfile $(HELPERS)/bootstrap/ \
 	  -t db-bootstrap
 
 start: _build_bootstrap_image
-	$(SETENV) docker-compose -f $(HELPERS)/docker-compose.yaml \
+	$(COMPLETE_SETENV) docker-compose -f $(HELPERS)/docker-compose.yaml \
 	  up -d
+	$(COMPLETE_SETENV) python $(SERVER_DIR_PATH)/main.py
 
 stop:
 	$(SETENV) docker-compose -f $(HELPERS)/docker-compose.yaml \
