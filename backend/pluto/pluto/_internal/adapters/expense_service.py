@@ -62,6 +62,7 @@ class ExpenseServiceImpl(IExpenseService):
                 # tags col separated by commas
                 if len(expense_row) == 3:
                     tags = expense_row[2].split(",")
+                    tags = list(filter(lambda a: len(a.strip()) > 0, tags))
 
                 expense_dict = self._expense_dict_from_row(user_id, expense_row)
                 expense = Expense.new(**expense_dict)
