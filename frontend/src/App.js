@@ -1,5 +1,7 @@
+import { Home } from "./Pages"
+
 function App() {
-  return <div class="text-xl font-black text-white">Bem-vindo!</div>
+  return <Home />
 }
 
 export default App
