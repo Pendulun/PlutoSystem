@@ -24,7 +24,7 @@ start: _build_bootstrap_image
 	$(COMPLETE_SETENV) python $(SERVER_DIR_PATH)/main.py
 
 stop:
-	$(SETENV) docker-compose -f $(HELPERS)/docker-compose.yaml \
+	$(BASE_SETENV) docker-compose -f $(HELPERS)/docker-compose.yaml \
 	  down --remove-orphans
 
 restart: stop start

@@ -74,8 +74,14 @@ INSERT INTO income VALUES (
 
 ----Add expenses----
 INSERT INTO expense VALUES (
-'mercado',
+'exp_id123',
 'daniel',
 'compras do mês',
 453.21
+);
+
+----Add expenses tag-----
+INSERT INTO expense_tag VALUES (
+'exp_id123',
+'mercado'
 );
