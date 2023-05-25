@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import pathlib
 from typing import Callable
 
-from flask import Flask, make_response, request
+from flask import Flask, make_response, redirect, request
+from werkzeug.utils import secure_filename
 
 from pluto._internal.adapters.expense_service import ExpenseServiceImpl
 from pluto._internal.adapters.income_service import IncomeServiceImpl
@@ -30,11 +32,19 @@ class EndpointHandler(object):
 
 
 class FlaskServerWrapper(Server):
+    FILE_UPLOAD_ALLOWED_EXTENSIONS = {"csv"}
+    UPLOAD_FOLDER = "./tmp_files/"
+
     def __init__(self, app: Flask, config: Config, database: Database):
         super().__init__(config)
         self.app = app
         self.db = database
         self.configs(self._cfg)
+        self.app.config["UPLOAD_FOLDER"] = FlaskServerWrapper.UPLOAD_FOLDER
+        self.app.config[
+            "ALLOWED_EXTENSIONS"
+        ] = FlaskServerWrapper.FILE_UPLOAD_ALLOWED_EXTENSIONS
+
         self._add_endpoints()
 
     def configs(self, config: Config):
@@ -46,6 +56,12 @@ class FlaskServerWrapper(Server):
             "/expenses/", "add_expenses", self.add_expense, methods=["POST"]
         )
         self.add_endpoint("/incomes/", "add_income", self.add_income, methods=["POST"])
+        self.add_endpoint(
+            "/upload/expenses/",
+            "upload_expense_file",
+            self.expense_file_upload,
+            methods=["POST", "GET"],
+        )
 
     def add_endpoint(
         self,
@@ -74,7 +90,7 @@ class FlaskServerWrapper(Server):
     def add_expense(self):
         expense_dict = request.get_json(force=True)
         expense_service = ExpenseServiceImpl(self.db)
-        expense_service.add_expense(expense_dict)
+        expense_service.add_expense_from_dict_without_id(expense_dict)
         return f"Inseriu {expense_dict} com sucesso!"
 
     def add_income(self):
@@ -82,3 +98,47 @@ class FlaskServerWrapper(Server):
         income_service = IncomeServiceImpl(self.db)
         income_service.add_income(income_dict)
         return f"Inseriu {income_dict} com sucesso!"
+
+    # Based on: https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
+    def expense_file_upload(self):
+        if request.method == "POST":
+            # check if the post request has the file part
+            if "file" not in request.files:
+                return redirect(request.url)
+
+            file = request.files["file"]
+
+            # If the user does not select a file, the browser submits an
+            # empty file without a filename.
+            if file.filename == "":
+                return redirect(request.url)
+
+            if file and self._allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+
+                upload_folder = pathlib.Path(self.app.config["UPLOAD_FOLDER"])
+                upload_folder.mkdir(parents=True, exist_ok=True)
+
+                complete_file_path = upload_folder / filename
+                file.save(complete_file_path)
+
+                expense_service = ExpenseServiceImpl(self.db)
+                try:
+                    expense_service.add_expense_from_file(
+                        file_path=complete_file_path, user_id=request.form["user_id"]
+                    )
+                except Exception:
+                    # it wasnt possible to add expense
+                    pass
+                finally:
+                    return redirect(request.url)
+
+        # if GET or dont pass any needed condition
+        return redirect(request.url)
+
+    def _allowed_file(self, filename):
+        return (
+            "." in filename
+            and filename.rsplit(".", 1)[1].lower()
+            in self.app.config["ALLOWED_EXTENSIONS"]
+        )
