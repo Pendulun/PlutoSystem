@@ -44,7 +44,7 @@ class ExpenseServiceImpl(IExpenseService):
     ) -> List[Tuple[Expense, List[str]]]:
         """
         Returns a list of tuples of form: ((1), (2))
-            (1) A Expense instance
+            (1) An Expense instance
             (2) A list of tags
         """
         expenses_and_tags_to_add = list()
