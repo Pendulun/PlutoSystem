@@ -101,16 +101,6 @@ class FlaskServerWrapper(Server):
 
     # Based on: https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
     def expense_file_upload(self):
-        base_html_return = """
-        <!doctype html>
-        <title>Upload new File</title>
-        <h1>Upload new File</h1>
-        <form action="/upload/expenses/" method=post enctype=multipart/form-data>
-        <input type="hidden" id="user_id" name="user_id" value="3487">
-        <input type=file name=file>
-        <input type=submit value=Upload>
-        </form>
-        """
         if request.method == "POST":
             # check if the post request has the file part
             if "file" not in request.files:
@@ -137,17 +127,14 @@ class FlaskServerWrapper(Server):
                     expense_service.add_expense_from_file(
                         file_path=complete_file_path, user_id=request.form["user_id"]
                     )
-                except Exception as e:
-                    return_html = base_html_return + f"\nErro no processamento: {e}"
-                    return return_html
-                else:
+                except Exception:
+                    # it wasnt possible to add expense
+                    pass
+                finally:
                     return redirect(request.url)
 
-            else:
-                return base_html_return + "\n Arquivo inválido!"
-
-        # if GET
-        return base_html_return
+        # if GET or dont pass any needed condition
+        return redirect(request.url)
 
     def _allowed_file(self, filename):
         return (
