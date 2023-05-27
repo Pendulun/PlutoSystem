@@ -15,6 +15,9 @@ class ExpenseServiceImpl(IExpenseService):
     def __init__(self, sm: Database) -> None:
         super().__init__(sm)
 
+    def list_expense(self) -> List[Expense]:
+        return self._sm.select_star(ExpenseServiceImpl._expense_table)
+
     def add_expense_from_dict_without_id(self, expense_dict: dict) -> None:
         expense = Expense.new(**expense_dict)
         self.add_expense(expense)

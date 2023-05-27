@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import pathlib
 from typing import Callable
 
@@ -13,6 +12,7 @@ from pluto._internal.config.config import Config
 from pluto._internal.domain.ports.database import Database
 from pluto._internal.log import log
 from pluto._internal.server.server import Server
+from pluto._internal.server.utils import dump_resp
 
 logger = log.logger()
 
@@ -60,6 +60,12 @@ class FlaskServerWrapper(Server):
         self._add_income_endpoints()
 
     def _add_expense_endpoints(self):
+        self.add_endpoint(
+            "/expenses/",
+            "list_expense",
+            self.list_expense,
+            methods=["GET"],
+        )
         self.add_endpoint(
             "/expenses/", "add_expenses", self.add_expense, methods=["POST"]
         )
@@ -109,11 +115,9 @@ class FlaskServerWrapper(Server):
     def run(self, **kwargs):
         self.app.run(debug=True, **kwargs)
 
-    def get_expense(self):
-        expense_dict = request.get_json(force=True)
-        expense_service = ExpenseServiceImpl(self.db)
-        expense_service.add_expense_from_dict_without_id(expense_dict)
-        return f"Inseriu {expense_dict} com sucesso!"
+    def list_expense(self):
+        income_service = ExpenseServiceImpl(self.db)
+        return dump_resp(income_service.list_expense())
 
     def add_expense(self):
         expense_dict = request.get_json(force=True)
@@ -160,7 +164,7 @@ class FlaskServerWrapper(Server):
 
     def list_income(self):
         income_service = IncomeServiceImpl(self.db)
-        return json.dumps(income_service.list_income())
+        return dump_resp(income_service.list_income())
 
     def add_income(self):
         income_dict = request.get_json(force=True)
