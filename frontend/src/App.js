@@ -6,21 +6,16 @@ import Cadastro from './Pages/Cadastro/Cadastro';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-// Criando c component 
-class App extends React.Component {
-    // Função que renderiza o componente
-    render() {
-        return (
-           <BrowserRouter>
-                <Routes>
-                  <Route path='/' element={<Home/>} />
-                  <Route path='/login' element={<Login/>} />
-                  <Route path='/cadastro' element={<Cadastro/>} />
-                </Routes>
-           </BrowserRouter>
-        )
-    }
-
+function App() {
+  return (
+      <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Login/>} />
+            <Route path='/home' element={<Home/>} />
+            <Route path='/cadastro' element={<Cadastro/>} />
+          </Routes>
+      </BrowserRouter>
+  )
 }
 
 export default App;
