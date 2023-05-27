@@ -12,6 +12,14 @@ class TestStorageManager:
     def test_init(self, storemgr):
         pass
 
+    def test_fmtsqlcols(self, storemgr):
+        s = storemgr._fmtsqlcols([])
+        assert s == "*"
+        s = storemgr._fmtsqlcols(["col1"])
+        assert s == "col1"
+        s = storemgr._fmtsqlcols(["col1", "col2"])
+        assert s == "col1, col2"
+
     def test_insert(self, storemgr, mock_dbconnect):
         ass = mock_dbconnect(
             expected_query=("INSERT INTO users (id, first_name, last_name) "+

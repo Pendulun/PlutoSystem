@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 import psycopg2
 
@@ -56,20 +56,50 @@ class SQLStorageManager(Database):
     def ping_table(self, table: str):
         self.query(f"SELECT * FROM {table} LIMIT 0")
 
-    # select_start selects all elements of a table. Useful mainly for testing.
+    # select_star selects all elements of a table. Useful mainly for testing.
     def select_star(self, table: str):
         return self.query(f"SELECT * FROM {table}")
 
+    def select_where_equal(
+        self, cols: List[str], table: str, and_conditions: dict[str, str]
+    ):
+        q = "SELECT {} FROM {} WHERE ".format(self._fmtsqlcols(cols), table)
+        q += self._where_equal_str(and_conditions)
+        return self.query(q)
+
     # select_star_where_equal selects all elements that match given conditions.
     def select_star_where_equal(self, table: str, and_conditions: dict[str, str]):
-        q = "SELECT * FROM {} WHERE ".format(table)
+        return self.select_where_equal(["*"], table, and_conditions)
+
+    def select_join_where_equal(
+        self,
+        cols: List[str],
+        tables: Tuple[str, str],
+        join_condition: Tuple[str, str],
+        and_conditions: dict[str, str],
+    ):
+        return self.select_where_equal(
+            cols=cols,
+            table=self._table_join_str(tables, join_condition),
+            and_conditions=and_conditions,
+        )
+
+    # _table_join_str returns SQL syntax for the join of two tables.
+    def _table_join_str(self, tables: Tuple[str, str], on_equals: Tuple[str, str]):
+        return (
+            f"{tables[0]} JOIN {tables[1]} ON "
+            + f"{tables[0]}.{on_equals[0]} = {tables[1]}.{on_equals[1]}"
+        )
+
+    def _where_equal_str(self, and_conditions: dict[str, str]) -> str:
+        s = ""
         condkeys = and_conditions.keys()
         for i, k, v in zip(range(len(condkeys)), condkeys, and_conditions.values()):
             if i == 0:
-                q += "{} = {} ".format(k, self._fmtsqllit(v))
+                s += "{} = {} ".format(k, self._fmtsqllit(v))
             else:
-                q += "AND {} = {} ".format(k, self._fmtsqllit(v))
-        return self.query(q)
+                s += "AND {} = {} ".format(k, self._fmtsqllit(v))
+        return s
 
     # _fmtsqllit formats a sql literal, adding enclosing quotes etc as
     # necessary
@@ -78,6 +108,17 @@ class SQLStorageManager(Database):
             return f"'{val}'"
         else:
             return val
+
+    # _fmtsqlcols formats a list of column names into sql syntax.
+    def _fmtsqlcols(self, cols: List[str]) -> str:
+        if len(cols) == 0:
+            return "*"
+        if len(cols) == 1:
+            return cols[0]
+        s = cols[0]
+        for col in cols[1:]:
+            s += f", {col}"
+        return s
 
     def _cursor_col_names(self, cur) -> list[str]:
         if cur.description is None:

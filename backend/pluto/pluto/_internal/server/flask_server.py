@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pathlib
-from typing import Callable
+from typing import Any, Callable, Dict
 
 from flask import Flask, make_response, redirect, request
 from werkzeug.utils import secure_filename
@@ -115,15 +115,16 @@ class FlaskServerWrapper(Server):
     def run(self, **kwargs):
         self.app.run(debug=True, **kwargs)
 
-    def list_expense(self):
-        income_service = ExpenseServiceImpl(self.db)
-        return dump_resp(income_service.list_expense())
+    def list_expense(self) -> Dict[Any, Any]:
+        filters: Dict[str, Any] = request.get_json(force=True)
+        expense_service = ExpenseServiceImpl(self.db)
+        return dump_resp(expense_service.list_expense(filters))
 
     def add_expense(self):
         expense_dict = request.get_json(force=True)
         expense_service = ExpenseServiceImpl(self.db)
         expense_service.add_expense_from_dict_without_id(expense_dict)
-        return f"Inseriu {expense_dict} com sucesso!"
+        return "{}"
 
     # Based on: https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
     def expense_file_upload(self):

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from pluto._internal.config.config import Config
 
@@ -42,5 +42,20 @@ class Database(ABC):
         pass
 
     @abstractmethod
+    def select_where_equal(
+        self, cols: List[str], table: str, and_conditions: dict[str, str]
+    ):
+        pass
+
+    @abstractmethod
     def select_star_where_equal(self, table: str, and_conditions: dict[str, str]):
+        pass
+
+    def select_join_where_equal(
+        self,
+        cols: List[str],
+        tables: Tuple[str, str],
+        join_condition: Tuple[str, str],
+        and_conditions: dict[str, str],
+    ):
         pass
