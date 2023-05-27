@@ -1,7 +1,19 @@
-import { Home } from "./Pages"
+import React from 'react';
+
+import Home from './Pages/Home/Home';
+import Login from './Pages/Login/Login';
+
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 function App() {
-  return <Home />
+  return (
+      <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Login/>} />
+            <Route path='/home' element={<Home/>} />
+          </Routes>
+      </BrowserRouter>
+  )
 }
 
-export default App
+export default App;

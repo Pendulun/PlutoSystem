@@ -1,6 +1,5 @@
-import React from 'react'
-
 export const Home = () => {
+  
   return (
     <>
       <div class="flex gap-4 items-center mb-[32px]">
@@ -30,4 +29,7 @@ export const Home = () => {
       </div>
     </>
   )
+
 }
+
+export default Home;
