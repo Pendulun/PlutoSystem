@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict
 
 from pluto._internal.domain.ports.database import Database
 from pluto._internal.config.config import Config
@@ -26,10 +26,10 @@ class ConfigMock(Config):
 
 class DatabaseMock(Database):
 
-    def insert(self, table: str, colvals: dict[str, Any]) -> list[Any]:
+    def insert(self, table: str, colvals: dict[str, Any]) -> Dict[str, Any]:
         pass
 
-    def query(self, q: str) -> list[Any]:
+    def query(self, q: str) -> Dict[str, Any]:
         pass
 
     def connect(self):

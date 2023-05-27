@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict, List
 
 import psycopg2
 
@@ -21,9 +21,9 @@ class SQLStorageManager(Database):
     def __init__(self, cfg: Config) -> None:
         super().__init__(cfg)
 
-    def insert(self, table: str, colvals: dict[str, Any]) -> list[Any]:
+    def insert(self, table: str, colvals: dict[str, Any]) -> List[Dict[str, Any]]:
         if len(colvals) == 0:
-            return []
+            return list()
         colstr = ""
         valstr = ""
         for col in colvals:
@@ -79,6 +79,14 @@ class SQLStorageManager(Database):
         else:
             return val
 
+    def _cursor_col_names(self, cur) -> list[str]:
+        if cur.description is None:
+            return []
+        cols: list[str] = []
+        for cur_col in cur.description:
+            cols.append(cur_col.name)
+        return cols
+
 
 class PGSQLStorageManager(SQLStorageManager):
     def __init__(self, cfg: Config) -> None:
@@ -91,23 +99,31 @@ class PGSQLStorageManager(SQLStorageManager):
             self._cfg.dbname,
         )
 
-    # Methods that must be overrided
-    def query(self, q: str) -> list[Any]:
+    # Methods that must be overriden
+    def query(self, q: str) -> List[Dict[str, Any]]:
         logger.debug("Querying database with string: {}".format(q))
-        if self._conn:
-            cur = self._conn.cursor()
-            cur.execute(q)
-            self._conn.commit()
-            rows_clean: list[tuple[str]] = []
-            if "SELECT" in q and cur.rowcount > 0:
-                rows = cur.fetchall()
-                rows_clean = list(map(lambda r: tuple(map(lambda s: s.strip(), r)), rows))  # type: ignore
-            cur.close()
-            return rows_clean
-        else:
+        if not self._conn:
             raise ValueError(
                 "Database has no connection! Must explicit call connect() before queries!"
             )
+        cur = self._conn.cursor()
+        cur.execute(q)
+        cols = self._cursor_col_names(cur)
+        self._conn.commit()
+        rows_clean: list[tuple[str]] = []
+        if "SELECT" in q and cur.rowcount > 0:
+            rows = cur.fetchall()
+            rows_clean = list(map(lambda r: tuple(map(lambda s: str(s).strip(), r)), rows))  # type: ignore
+        cur.close()
+        rows_dicts: List[Dict[str, Any]] = []
+        for row in rows_clean:
+            newdict = dict()
+            for i in range(len(row)):
+                key = cols[i]
+                val = row[i]
+                newdict[key] = val
+            rows_dicts.append(newdict)
+        return rows_dicts
 
     def connect(self):
         logger.debug(f"Connecting to {self._cfg.dbname}")

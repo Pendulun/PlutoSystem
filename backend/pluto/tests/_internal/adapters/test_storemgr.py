@@ -16,6 +16,7 @@ class TestStorageManager:
         ass = mock_dbconnect(
             expected_query=("INSERT INTO users (id, first_name, last_name) "+
                             "VALUES ('bg', 'billy', 'graham')"),
+            expected_cols=(),
             expected_rows=[],
         )
         storemgr.connect()
@@ -26,28 +27,34 @@ class TestStorageManager:
 
     def test_select_star(self, storemgr, mock_dbconnect):
         expected_query = "SELECT * FROM users"
-        expected_rows = [('bg', 'billy', 'graham')]
+        expected_cols = ('id', 'first_name', 'last_name')
+        expected_vals = ('bg', 'billy', 'graham')
+        expected_dict = {elem[0]: elem[1] for elem in zip(expected_cols, expected_vals)}
         ass = mock_dbconnect(
             expected_query=expected_query,
-            expected_rows=expected_rows,
+            expected_cols=expected_cols,
+            expected_rows=[expected_vals],
         )
         storemgr.connect()
         res = storemgr.select_star("users")
         storemgr.close_conn()
         ass()
-        assert res == expected_rows
+        assert res == [expected_dict]
 
     def test_select_star_where_equal(self, storemgr, mock_dbconnect):
         expected_query = ("SELECT * FROM users WHERE id = 'bg' AND "+
                           "first_name = 'billy' ")
-        expected_rows = [('bg', 'billy', 'graham')]
+        expected_cols = ('id', 'first_name', 'last_name')
+        expected_vals = ('bg', 'billy', 'graham')
+        expected_dict = {elem[0]: elem[1] for elem in zip(expected_cols, expected_vals)}
         ass = mock_dbconnect(
             expected_query=expected_query,
-            expected_rows=expected_rows,
+            expected_cols=expected_cols,
+            expected_rows=[expected_vals],
         )
         storemgr.connect()
         res = storemgr.select_star_where_equal(
             "users", {"id": "bg", "first_name": "billy"})
         storemgr.close_conn()
         ass()
-        assert res == expected_rows
+        assert res == [expected_dict]

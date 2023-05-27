@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Dict, List
 
 from pluto._internal.config.config import Config
 
@@ -10,11 +10,11 @@ class Database(ABC):
         self._conn = None
 
     @abstractmethod
-    def insert(self, table: str, colvals: dict[str, Any]) -> list[Any]:
+    def insert(self, table: str, colvals: dict[str, Any]) -> List[Dict[str, Any]]:
         pass
 
     @abstractmethod
-    def query(self, q: str) -> list[Any]:
+    def query(self, q: str) -> List[Dict[str, Any]]:
         pass
 
     @abstractmethod
