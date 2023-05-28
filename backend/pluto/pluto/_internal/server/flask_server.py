@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 
 from pluto._internal.adapters.expense_service import ExpenseServiceImpl
 from pluto._internal.adapters.income_service import IncomeServiceImpl
+from pluto._internal.adapters.user_service import UserServiceImpl
 from pluto._internal.config.config import Config
 from pluto._internal.domain.ports.database import Database
 from pluto._internal.log import log
@@ -58,6 +59,7 @@ class FlaskServerWrapper(Server):
     def _add_endpoints(self):
         self._add_expense_endpoints()
         self._add_income_endpoints()
+        self._add_user_endpoints()
 
     def _add_expense_endpoints(self):
         self.add_endpoint(
@@ -89,6 +91,20 @@ class FlaskServerWrapper(Server):
             "upload_income_file",
             self.income_file_upload,
             methods=["POST", "GET"],
+        )
+
+    def _add_user_endpoints(self):
+        self.add_endpoint(
+            "/users/",
+            "list_user",
+            self.list_user,
+            methods=["GET"],
+        )
+        self.add_endpoint(
+            "/users/",
+            "add_user",
+            self.add_user,
+            methods=["POST"],
         )
 
     def add_endpoint(
@@ -124,7 +140,7 @@ class FlaskServerWrapper(Server):
         expense_dict = request.get_json(force=True)
         expense_service = ExpenseServiceImpl(self.db)
         expense_service.add_expense_from_dict_without_id(expense_dict)
-        return "{}"
+        return dump_resp()
 
     # Based on: https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
     def expense_file_upload(self):
@@ -171,7 +187,7 @@ class FlaskServerWrapper(Server):
         income_dict = request.get_json(force=True)
         income_service = IncomeServiceImpl(self.db)
         income_service.add_income(income_dict)
-        return "{}"
+        return dump_resp()
 
     # Based on: https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
     def income_file_upload(self):
@@ -209,6 +225,16 @@ class FlaskServerWrapper(Server):
                 pass
             finally:
                 return redirect(request.url)
+
+    def list_user(self):
+        user_service = UserServiceImpl(self.db)
+        return dump_resp(user_service.list_user())
+
+    def add_user(self):
+        user_dict = request.get_json(force=True)
+        user_service = UserServiceImpl(self.db)
+        user_service.add_user(user_dict)
+        return dump_resp()
 
     def _allowed_file(self, filename):
         return (
