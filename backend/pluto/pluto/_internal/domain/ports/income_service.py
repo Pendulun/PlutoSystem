@@ -18,3 +18,7 @@ class IIncomeService(ABC):
     @abstractmethod
     def add_income(self, income_dict: dict) -> None:
         pass
+
+    @abstractmethod
+    def add_income_from_file(self, file_path: str, user_id: str) -> None:
+        pass

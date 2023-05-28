@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import Any, Dict, List
 
+from pluto._internal.domain.model.expense import Expense
 from pluto._internal.domain.ports.database import Database
 
 
@@ -19,4 +21,8 @@ class IExpenseService(ABC):
 
     @abstractmethod
     def add_expense_from_file(self, file_path: str, user_id: str) -> None:
+        pass
+
+    @abstractmethod
+    def list_expense(self, filters: Dict[str, Any]) -> List[Expense]:
         pass

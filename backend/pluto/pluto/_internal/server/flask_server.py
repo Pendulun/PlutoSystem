@@ -142,42 +142,22 @@ class FlaskServerWrapper(Server):
         expense_service.add_expense_from_dict_without_id(expense_dict)
         return dump_resp()
 
-    # Based on: https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
     def expense_file_upload(self):
-        if request.method == "POST":
-            # check if the post request has the file part
-            if "file" not in request.files:
-                return redirect(request.url)
+        if request.method != "POST":
+            # if GET or dont pass any needed condition
+            return redirect(request.url)
 
-            file = request.files["file"]
+        fpath = self._upload_file_from_request()
 
-            # If the user does not select a file, the browser submits an
-            # empty file without a filename.
-            if file.filename == "":
-                return redirect(request.url)
-
-            if file and self._allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-
-                upload_folder = pathlib.Path(self.app.config["UPLOAD_FOLDER"])
-                upload_folder.mkdir(parents=True, exist_ok=True)
-
-                complete_file_path = upload_folder / filename
-                file.save(complete_file_path)
-
-                expense_service = ExpenseServiceImpl(self.db)
-                try:
-                    expense_service.add_expense_from_file(
-                        file_path=complete_file_path, user_id=request.form["user_id"]
-                    )
-                except Exception:
-                    # it wasnt possible to add expense
-                    pass
-                finally:
-                    return redirect(request.url)
-
-        # if GET or dont pass any needed condition
-        return redirect(request.url)
+        expense_service = ExpenseServiceImpl(self.db)
+        try:
+            expense_service.add_expense_from_file(
+                file_path=fpath, user_id=request.form["user_id"]
+            )
+        except Exception as e:
+            logger.error(f"Unable to add expense: {e}")
+        finally:
+            return redirect(request.url)
 
     def list_income(self):
         income_service = IncomeServiceImpl(self.db)
@@ -189,12 +169,35 @@ class FlaskServerWrapper(Server):
         income_service.add_income(income_dict)
         return dump_resp()
 
-    # Based on: https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
     def income_file_upload(self):
         if request.method != "POST":
             # if GET or dont pass any needed condition
             return redirect(request.url)
 
+        fpath = self._upload_file_from_request()
+
+        income_service = IncomeServiceImpl(self.db)
+        try:
+            income_service.add_income_from_file(
+                file_path=fpath, user_id=request.form["user_id"]
+            )
+        except Exception as e:
+            logger.error(f"Unable to add income: {e}")
+        finally:
+            return redirect(request.url)
+
+    def list_user(self):
+        user_service = UserServiceImpl(self.db)
+        return dump_resp(user_service.list_user())
+
+    def add_user(self):
+        user_dict = request.get_json(force=True)
+        user_service = UserServiceImpl(self.db)
+        user_service.add_user(user_dict)
+        return dump_resp()
+
+    # Based on: https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
+    def _upload_file_from_request(self):
         # check if the post request has the file part
         if "file" not in request.files:
             return redirect(request.url)
@@ -212,29 +215,8 @@ class FlaskServerWrapper(Server):
             upload_folder = pathlib.Path(self.app.config["UPLOAD_FOLDER"])
             upload_folder.mkdir(parents=True, exist_ok=True)
 
-            complete_file_path = upload_folder / filename
-            file.save(complete_file_path)
-
-            expense_service = ExpenseServiceImpl(self.db)
-            try:
-                expense_service.add_expense_from_file(
-                    file_path=complete_file_path, user_id=request.form["user_id"]
-                )
-            except Exception:
-                # it wasnt possible to add expense
-                pass
-            finally:
-                return redirect(request.url)
-
-    def list_user(self):
-        user_service = UserServiceImpl(self.db)
-        return dump_resp(user_service.list_user())
-
-    def add_user(self):
-        user_dict = request.get_json(force=True)
-        user_service = UserServiceImpl(self.db)
-        user_service.add_user(user_dict)
-        return dump_resp()
+            fpath = upload_folder / filename
+            file.save(fpath)
 
     def _allowed_file(self, filename):
         return (
