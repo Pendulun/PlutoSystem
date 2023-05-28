@@ -38,7 +38,7 @@ class IncomeServiceImpl(IIncomeService):
                 dict(
                     user_id=user_id,
                     src=by_semicol[0],
-                    amount=by_semicol[1],
+                    amount=float(by_semicol[1]),
                 )
             )
         for income_dict in income_dicts:
