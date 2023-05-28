@@ -79,9 +79,19 @@ INSERT INTO expense VALUES (
 'compras do mês',
 453.21
 );
+INSERT INTO expense VALUES (
+'exp_id333',
+'yowgf',
+'wasting money',
+999.99
+);
 
 ----Add expenses tag-----
 INSERT INTO expense_tag VALUES (
 'exp_id123',
 'mercado'
+);
+INSERT INTO expense_tag VALUES (
+'exp_id123',
+'compra-de-ovos'
 );

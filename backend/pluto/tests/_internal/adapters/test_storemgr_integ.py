@@ -36,5 +36,9 @@ class TestStorageManager:
     ):
         real_storemgr_configured.insert("users", putin_user)
         real_storemgr_configured.insert("users", bj_user)
-        rows = real_storemgr_configured.select_star("users")
-        assert rows == [('putin', 'vladimir', 'putin'), ('bj', 'b', 'j')]
+        expected = [
+            {"id": "putin", "first_name": "vladimir", "last_name": "putin"},
+            {"id": "bj", "first_name": "b", "last_name": "j"},
+        ]
+        actual = real_storemgr_configured.select_star("users")
+        assert actual == expected

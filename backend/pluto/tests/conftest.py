@@ -29,11 +29,21 @@ def basic_config(basic_envvars):
 
 @pytest.fixture
 def mock_dbconnect():
+    class CursorCol:
+        def __init__(self, name):
+            self.name = name
+    def cursor_cols(names):
+        cols = []
+        for name in names:
+            cols.append(CursorCol(name))
+        return cols
+
     with patch("psycopg2.connect") as mock_connect:
-        def mock_func(expected_query, expected_rows):
+        def mock_func(expected_query, expected_cols, expected_rows):
             mock_cursor = Mock()
             mock_cursor.fetchall.return_value = expected_rows
             mock_cursor.rowcount = len(expected_rows)
+            mock_cursor.description = cursor_cols(expected_cols)
             mock_conn = Mock()
             mock_conn.cursor.return_value = mock_cursor
             mock_connect.return_value = mock_conn

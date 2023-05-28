@@ -1,6 +1,6 @@
 import csv
 import pathlib
-from typing import List, Tuple
+from typing import Any, Dict, List, Tuple
 
 from pluto._internal.domain.model.expense import Expense
 from pluto._internal.domain.ports.database import Database
@@ -14,6 +14,26 @@ class InvalidRow(Exception):
 class ExpenseServiceImpl(IExpenseService):
     def __init__(self, sm: Database) -> None:
         super().__init__(sm)
+
+    def list_expense(self, filters: Dict[str, Any]) -> List[Expense]:
+        if len(filters) == 0:
+            expense_dicts = self._sm.select_star(ExpenseServiceImpl._expense_table)
+        else:
+            if IExpenseService.list_expense_filter_tag_name not in filters:
+                raise ValueError(f"invalid filters: {filters}")
+            filter_by_tag = filters[IExpenseService.list_expense_filter_tag_name]
+            expense_dicts = self._sm.select_join_where_equal(
+                cols=Expense.fields(),
+                tables=(
+                    ExpenseServiceImpl._expense_table,
+                    ExpenseServiceImpl._expense_tag_table,
+                ),
+                join_condition=("id", "expense_id"),
+                and_conditions=dict(tag_name=filter_by_tag),
+            )
+        expenses = [Expense(**d) for d in expense_dicts]
+
+        return expenses
 
     def add_expense_from_dict_without_id(self, expense_dict: dict) -> None:
         expense = Expense.new(**expense_dict)

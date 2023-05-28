@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict, List, Tuple
 
 from pluto._internal.domain.ports.database import Database
 from pluto._internal.config.config import Config
@@ -26,10 +26,10 @@ class ConfigMock(Config):
 
 class DatabaseMock(Database):
 
-    def insert(self, table: str, colvals: dict[str, Any]) -> list[Any]:
+    def insert(self, table: str, colvals: dict[str, Any]) -> List[Dict[str, Any]]:
         pass
 
-    def query(self, q: str) -> list[Any]:
+    def query(self, q: str) -> List[Dict[str, Any]]:
         pass
 
     def connect(self):
@@ -50,5 +50,20 @@ class DatabaseMock(Database):
     def select_star(self, table: str):
         pass
 
+    def select_where_equal(
+        self, cols: List[str], table: str, and_conditions: dict[str, str]
+    ):
+        pass
+
     def select_star_where_equal(self, table: str, and_conditions: dict[str, str]):
         pass
+
+    def select_join_where_equal(
+        self,
+        cols: List[str],
+        tables: Tuple[str, str],
+        join_condition: Tuple[str, str],
+        and_conditions: dict[str, str],
+    ):
+        pass
+
