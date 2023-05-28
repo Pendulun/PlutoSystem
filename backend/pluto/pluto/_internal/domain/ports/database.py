@@ -51,6 +51,7 @@ class Database(ABC):
     def select_star_where_equal(self, table: str, and_conditions: dict[str, str]):
         pass
 
+    @abstractmethod
     def select_join_where_equal(
         self,
         cols: List[str],
