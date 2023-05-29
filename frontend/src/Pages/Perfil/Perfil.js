@@ -1,5 +1,6 @@
-import { IconEditar } from './components/icon_editar.js';
-import { IconMudarNomeUsuario, IconMudarEmail, IconDeletarConta, IconTermosECondicoes } from './components/opcoes_estaticas.js';
+import { IconEditar } from './components/Icons/icon_editar.js';
+import { IconMudarNomeUsuario, IconMudarEmail, IconDeletarConta, IconTermosECondicoes } from './components/Icons/opcoes_estaticas.js';
+import { AccountButton } from './components/AccountButton.js'
 
 export const Login = () => {
   
@@ -10,41 +11,32 @@ export const Login = () => {
   }
 
   return (
-    <div class="flex flex-col items-center h-screen">
-      <IconEditar/>
-      <div class="text-white font-Inter font-bold text-bs mt-[12px]">Maria da Silva</div>
-      <div class="text-white font-Inter font-normal text-xs mb-[32px]">maria.23@mail.com</div>
-      <div class="flex flex-col justify-start">
-        <div class="flex justify-start mb-[10px]">
-          <IconMudarNomeUsuario/>
-          <div class="ml-4">
-            <p class="text-white font-Inter font-normal text-sm14">Mudar nome do Usuário</p>
-          </div>
+    <div class="flex flex-col min-h-screen max-w-lg mx-auto pt-[60px] px-6 items-center">
+      <div class="flex flex-col items-center">
+        <div className='w-[154px] mx-auto bg-gray aspect-square rounded-full overflow-hidden -mb-6'>
+          <img alt="" />
         </div>
-        <div class="border border-gray5 h-0 w-52 mb-[10px]"></div>
-        <div class="flex justify-start mb-[10px]">
-          <IconMudarEmail/>
-          <div class="ml-4">
-            <p class="text-white font-Inter font-normal text-sm14">Mudar Email</p>
-          </div>
-        </div>
-        <div class="border border-gray5 h-0 w-52 mb-[10px]"></div>
-        <div class="flex justify-start mb-[10px]">
-          <IconDeletarConta/>
-          <div class="ml-4">
-            <p class="text-white font-Inter font-normal text-sm14">Deletar conta</p>
-          </div>
-        </div>
-        <div class="border border-gray5 h-0 w-52 mb-[10px]"></div>
-        <div class="flex justify-start mb-[10px]">
-          <IconTermosECondicoes/>
-          <div class="ml-4">
-            <p class="text-white font-Inter font-normal text-sm14">Termos e Condições</p>
-          </div>
-        </div>
-        <div class="border border-gray5 h-0 w-52 mb-[24px]"></div>
+        <IconEditar/>
       </div>
-      <button class="mb-4 w-32 h-6 bg-darkTeal rounded-lg" onClick={handleClickLogin}><span class="text-white text-sm font-bold">Sair</span></button>
+
+      <div class="text-white font-Inter font-bold text-rg mt-[30px]">Maria da Silva</div>
+      <div class="text-white font-Inter font-normal text-bs mb-[60px]">maria.23@mail.com</div>
+      
+      <div class="w-full justify-start text-bs">
+        <AccountButton title='Mudar nome do Usuário' icon={<IconMudarNomeUsuario/>}/>
+        <hr class="text-gray5 mb-[22px]"></hr>
+
+        <AccountButton title='Mudar email' icon={<IconMudarEmail/>}/>
+        <hr class="text-gray5 mb-[22px]"></hr>
+
+        <AccountButton title='Deletar conta' icon={<IconDeletarConta/>}/>
+        <hr class="text-gray5 mb-[22px]"></hr>
+
+        <AccountButton title='Termos e condições' icon={<IconTermosECondicoes/>}/>
+        <hr class="text-gray5 mb-[22px]"></hr>
+      </div>
+
+      <button class="mt-[40px] w-[218px] h-[40px] bg-darkTeal rounded-lg" onClick={handleClickLogin}><span class="text-white text-sm font-bold">Sair</span></button>
     </div>
   )
     
