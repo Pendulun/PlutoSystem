@@ -1,7 +1,8 @@
 create table if not exists users (
   id char(32),
-  first_name char(32),
-  last_name char(32),
+  name char(32),
+  email char(64),
+  password char(32),
   PRIMARY KEY(id)
 );
 
