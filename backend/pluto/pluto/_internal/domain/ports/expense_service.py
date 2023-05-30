@@ -24,5 +24,9 @@ class IExpenseService(ABC):
         pass
 
     @abstractmethod
+    def expenses_from_user_id(self, user_id: str) -> list[Expense]:
+        pass
+
+    @abstractmethod
     def list_expense(self, filters: Dict[str, Any]) -> List[Expense]:
         pass

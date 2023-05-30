@@ -43,3 +43,10 @@ class IncomeServiceImpl(IIncomeService):
             )
         for income_dict in income_dicts:
             self.add_income(income_dict)
+
+    def incomes_from_user_id(self, user_id: str) -> list[Income]:
+        conditions = {"user_id": user_id}
+        results = self._sm.select_star_where_equal(
+            IncomeServiceImpl._income_table, conditions
+        )
+        return [Income.from_complete_dict(result) for result in results]

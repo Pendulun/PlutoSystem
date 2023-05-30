@@ -10,6 +10,7 @@ create table if not exists income (
   user_id char(32),
   src char(32),
   amount real,
+  inc_date date,
   PRIMARY KEY(id)
 );
 
@@ -18,6 +19,7 @@ create table if not exists expense (
   user_id char(32),
   src char(32),
   amount real,
+  exp_date date,
   PRIMARY KEY(id)
 );
 

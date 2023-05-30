@@ -3,6 +3,7 @@ from __future__ import annotations
 import pathlib
 from typing import Any, Callable, Dict
 
+import dash  # type: ignore
 from flask import Flask, make_response, redirect, request
 from werkzeug.utils import secure_filename
 
@@ -24,7 +25,52 @@ logger = log.logger()
 def make_flask_server(config: Config, database: Database) -> Server:
     flask_app = Flask("pluto")
     server = FlaskServerWrapper(flask_app, config, database)
+
+    from pluto._internal.dash.expenses.callbacks import \
+        register_callbacks as register_callbacks1
+    from pluto._internal.dash.expenses.layout import layout as layout1
+
+    register_dashapp(
+        flask_app, "Expenses", "dash_expenses", layout1, register_callbacks1
+    )
+
+    from pluto._internal.dash.incomes.callbacks import \
+        register_callbacks as register_callbacks2
+    from pluto._internal.dash.incomes.layout import layout as layout2
+
+    register_dashapp(flask_app, "Incomes", "dash_incomes", layout2, register_callbacks2)
+
+    from pluto._internal.dash.exp_and_inc.callbacks import \
+        register_callbacks as register_callbacks3
+    from pluto._internal.dash.exp_and_inc.layout import layout as layout3
+
+    register_dashapp(flask_app, "Entries", "dash_entries", layout3, register_callbacks3)
+
     return server
+
+
+# Based on: https://github.com/okomarov/dash_on_flask/blob/master/app/__init__.py
+# https://medium.com/@olegkomarov_77860/how-to-embed-a-dash-app-into-an-existing-flask-app-ea05d7a2210b
+# https://dash.plotly.com/urls
+def register_dashapp(
+    flask_app: Flask, title, base_pathname, layout, register_callbacks_fun
+):
+    meta_viewport = {
+        "name": "viewport",
+        "content": "width=device-width, initial-scale=1, shrink-to-fit=no",
+    }
+
+    my_dashapp = dash.Dash(
+        __name__,
+        server=flask_app,
+        url_base_pathname=f"/{base_pathname}/",
+        meta_tags=[meta_viewport],
+    )
+    # Push an application context so we can use Flask's 'current_app'
+    with flask_app.app_context():
+        my_dashapp.title = title
+        my_dashapp.layout = layout
+        register_callbacks_fun(my_dashapp)
 
 
 class EndpointHandler(object):
@@ -43,7 +89,7 @@ class FlaskServerWrapper(Server):
     def __init__(self, app: Flask, config: Config, database: Database):
         super().__init__(config)
         self.app = app
-        self.db = database
+        Server.DB_IMP = database
         self.configs(self._cfg)
         self.app.config["UPLOAD_FOLDER"] = FlaskServerWrapper.UPLOAD_FOLDER
         self.app.config[
@@ -133,12 +179,12 @@ class FlaskServerWrapper(Server):
 
     def list_expense(self) -> Dict[Any, Any]:
         filters: Dict[str, Any] = request.get_json(force=True)
-        expense_service = ExpenseServiceImpl(self.db)
+        expense_service = ExpenseServiceImpl(Server.DB_IMP)
         return dump_resp(expense_service.list_expense(filters))
 
     def add_expense(self):
         expense_dict = request.get_json(force=True)
-        expense_service = ExpenseServiceImpl(self.db)
+        expense_service = ExpenseServiceImpl(Server.DB_IMP)
         expense_service.add_expense_from_dict_without_id(expense_dict)
         return dump_resp()
 
@@ -149,7 +195,7 @@ class FlaskServerWrapper(Server):
 
         fpath = self._upload_file_from_request()
 
-        expense_service = ExpenseServiceImpl(self.db)
+        expense_service = ExpenseServiceImpl(Server.DB_IMP)
         try:
             expense_service.add_expense_from_file(
                 file_path=fpath, user_id=request.form["user_id"]
@@ -160,12 +206,12 @@ class FlaskServerWrapper(Server):
             return redirect(request.url)
 
     def list_income(self):
-        income_service = IncomeServiceImpl(self.db)
+        income_service = IncomeServiceImpl(Server.DB_IMP)
         return dump_resp(income_service.list_income())
 
     def add_income(self):
         income_dict = request.get_json(force=True)
-        income_service = IncomeServiceImpl(self.db)
+        income_service = IncomeServiceImpl(Server.DB_IMP)
         income_service.add_income(income_dict)
         return dump_resp()
 
@@ -176,7 +222,7 @@ class FlaskServerWrapper(Server):
 
         fpath = self._upload_file_from_request()
 
-        income_service = IncomeServiceImpl(self.db)
+        income_service = IncomeServiceImpl(Server.DB_IMP)
         try:
             income_service.add_income_from_file(
                 file_path=fpath, user_id=request.form["user_id"]
@@ -187,12 +233,12 @@ class FlaskServerWrapper(Server):
             return redirect(request.url)
 
     def list_user(self):
-        user_service = UserServiceImpl(self.db)
+        user_service = UserServiceImpl(Server.DB_IMP)
         return dump_resp(user_service.list_user())
 
     def add_user(self):
         user_dict = request.get_json(force=True)
-        user_service = UserServiceImpl(self.db)
+        user_service = UserServiceImpl(Server.DB_IMP)
         user_service.add_user(user_dict)
         return dump_resp()
 
@@ -215,8 +261,22 @@ class FlaskServerWrapper(Server):
             upload_folder = pathlib.Path(self.app.config["UPLOAD_FOLDER"])
             upload_folder.mkdir(parents=True, exist_ok=True)
 
-            fpath = upload_folder / filename
-            file.save(fpath)
+            complete_file_path = upload_folder / filename
+            file.save(complete_file_path)
+
+            expense_service = ExpenseServiceImpl(Server.DB_IMP)
+            try:
+                expense_service.add_expense_from_file(
+                    file_path=complete_file_path, user_id=request.form["user_id"]
+                )
+            except Exception:
+                # it wasnt possible to add expense
+                pass
+            finally:
+                return redirect(request.url)
+
+        # if GET or dont pass any needed condition
+        return redirect(request.url)
 
     def _allowed_file(self, filename):
         return (

@@ -22,3 +22,7 @@ class IIncomeService(ABC):
     @abstractmethod
     def add_income_from_file(self, file_path: str, user_id: str) -> None:
         pass
+
+    @abstractmethod
+    def incomes_from_user_id(self, user_id: str) -> list[Income]:
+        pass
