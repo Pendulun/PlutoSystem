@@ -20,7 +20,7 @@
     "web-vitals": "^3.3.1"
   },
   "scripts": {
-    "bff": "node ./src/Server/index.js",
+    "bff": "node ./bff/index.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
