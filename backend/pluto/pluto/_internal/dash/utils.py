@@ -10,9 +10,9 @@ from pluto._internal.domain.model.income import Income
 class DashCallbacksUtil:
     month_year_fmt = "{month}/{year}"
 
-    @staticmethod
-    def get_last_twelve_months_str_list(month_year_fmt) -> list[str]:
-        today_date = datetime.today()
+    @classmethod
+    def get_last_twelve_months_str_list(cls, month_year_fmt) -> list[str]:
+        today_date = cls.get_current_date()
 
         curr_month = today_date.month
         curr_year = today_date.year
@@ -32,17 +32,24 @@ class DashCallbacksUtil:
 
         return months_and_years
 
+    # useful for testing
+    @classmethod
+    def get_current_date(cls):
+        today_date = datetime.today()
+        return today_date
+
     @classmethod
     def total_amount_in_months(
         cls, obj_list: Union[List[Expense], List[Income]], last_twelve_months: List[str]
     ) -> Dict[str, float]:
         total_amount_last_year: Dict[str, float] = dict()
+        total_amount_last_year = {month: 0 for month in last_twelve_months}
         for obj in obj_list:
             obj_date: Union[datetime, str] = (
                 obj.exp_date if isinstance(obj, Expense) else obj.inc_date
             )
             if isinstance(obj_date, str):
-                obj_date = datetime.strptime(obj_date, "%d/%m%Y")
+                obj_date = datetime.strptime(obj_date, "%d/%m/%Y")
 
             curr_month = obj_date.month
             curr_year = obj_date.year
@@ -51,9 +58,8 @@ class DashCallbacksUtil:
             )
 
             if formated_month_year in last_twelve_months:
-                curr_total = total_amount_last_year.get(formated_month_year, 0)
-                curr_total += obj.amount
-                total_amount_last_year[formated_month_year] = curr_total
+                total_amount_last_year[formated_month_year] += obj.amount
+
         return total_amount_last_year
 
     @classmethod
