@@ -111,3 +111,10 @@ class ExpenseServiceImpl(IExpenseService):
             )
 
         return expense_dict
+
+    def expenses_from_user_id(self, user_id: str) -> list[Expense]:
+        conditions = {"user_id": user_id}
+        results = self._sm.select_star_where_equal(
+            ExpenseServiceImpl._expense_table, conditions
+        )
+        return [Expense.from_complete_dict(result) for result in results]

@@ -38,7 +38,7 @@ class Database(ABC):
         pass
 
     @abstractmethod
-    def select_star(self, table: str):
+    def select_star(self, table: str) -> list[Any]:
         pass
 
     @abstractmethod

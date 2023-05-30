@@ -56,8 +56,8 @@ class SQLStorageManager(Database):
     def ping_table(self, table: str):
         self.query(f"SELECT * FROM {table} LIMIT 0")
 
-    # select_star selects all elements of a table. Useful mainly for testing.
-    def select_star(self, table: str):
+    # select_start selects all elements of a table. Useful mainly for testing.
+    def select_star(self, table: str) -> list[Any]:
         return self.query(f"SELECT * FROM {table}")
 
     def select_where_equal(
@@ -154,7 +154,14 @@ class PGSQLStorageManager(SQLStorageManager):
         rows_clean: list[tuple[str]] = []
         if "SELECT" in q and cur.rowcount > 0:
             rows = cur.fetchall()
-            rows_clean = list(map(lambda r: tuple(map(lambda s: str(s).strip(), r)), rows))  # type: ignore
+            rows_clean = list(
+                map(
+                    lambda r: tuple(
+                        map(lambda s: s.strip() if isinstance(s, str) else s, r)
+                    ),
+                    rows,
+                )
+            )  # type: ignore
         cur.close()
         rows_dicts: List[Dict[str, Any]] = []
         for row in rows_clean:

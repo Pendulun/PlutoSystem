@@ -25,6 +25,8 @@ def make_server(type: ServerType, config: Config, database: Database) -> Server:
 
 
 class Server:
+    DB_IMP: Database
+
     def __init__(self, cfg: Config) -> None:
         self._cfg = cfg
 

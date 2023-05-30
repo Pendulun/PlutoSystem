@@ -1,7 +1,15 @@
 from typing import Any, Dict, List, Tuple
+from datetime import datetime
 
 from pluto._internal.domain.ports.database import Database
 from pluto._internal.config.config import Config
+from pluto._internal.dash.utils import DashCallbacksUtil
+
+
+class DashCallbacksUtilMock(DashCallbacksUtil):
+    @classmethod
+    def get_current_date(cls):
+        return datetime.strptime("01/05/2023", "%d/%m/%Y")
 
 class ConfigMock(Config):
     @staticmethod
