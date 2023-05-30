@@ -17,7 +17,7 @@ export const Home = () => {
       <h1 class="text-white font-semibold text-3xl mb-[20px]">R$ 15.653</h1>
       <hr class="text-lightGray mb-[20px]"/>
       <h1 class="text-lighterGray font-black text-bs mb-[20px]">Visão geral</h1>
-      <div class="relative w-auto min-h-[400px] overflow-hidden bg-gray rounded-xl dark:bg-gray-600 p-5">
+      <div class="relative w-auto min-h-[340px] overflow-hidden bg-gray rounded-xl dark:bg-gray-600 p-5">
         <div class="flex justify-between items-center mb-4">
           <h1 class="text-lighterGray font-medium text-bs">Investimentos</h1>
           <h2 class="text-lighterGray font-medium text-bs">+ R$ 500</h2>
