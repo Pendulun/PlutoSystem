@@ -1,5 +1,9 @@
+import { useQueryListUsers } from "../../Services/queries";
+
 export const Home = () => {
-  
+  const { data = [] } = useQueryListUsers()
+  console.log(data)
+
   return (
     <>
       <div class="flex gap-4 items-center mb-[32px]">

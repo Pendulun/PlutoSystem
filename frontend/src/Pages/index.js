@@ -1,3 +1,5 @@
 export * from './Home'
 export * from './Login'
 export * from './Cadastro'
+export * from './Despesas'
+export * from './Rendas'
