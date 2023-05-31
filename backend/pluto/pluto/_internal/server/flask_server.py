@@ -118,8 +118,8 @@ class FlaskServerWrapper(Server):
     def _add_expense_endpoints(self):
         self.add_endpoint(
             "/expenses/",
-            "list_expense",
-            self.list_expense,
+            "list_expenses",
+            self.list_expenses,
             methods=["GET"],
         )
         self.add_endpoint(
@@ -185,7 +185,7 @@ class FlaskServerWrapper(Server):
     def run(self, **kwargs):
         self.app.run(debug=True, **kwargs)
 
-    def list_expense(self) -> Dict[Any, Any]:
+    def list_expenses(self) -> Dict[Any, Any]:
         filters: Dict[str, Any] = request.get_json(force=True)
         expense_service = ExpenseServiceImpl(Server.DB_IMP)
         return dump_resp(expense_service.list_expense(filters))

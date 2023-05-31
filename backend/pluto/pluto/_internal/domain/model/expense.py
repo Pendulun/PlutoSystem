@@ -31,3 +31,13 @@ class Expense:
         id, user_id, src, amount, exp_date
         """
         return Expense(**expense_dict)
+
+    def to_dict(self):
+        my_dict = {
+            "user_id": self.user_id,
+            "id": self.id,
+            "src": self.src,
+            "amount": self.amount,
+            "exp_date": self.exp_date.strftime("%d/%m/%Y"),
+        }
+        return my_dict
