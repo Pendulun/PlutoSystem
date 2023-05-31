@@ -215,6 +215,18 @@ INSERT INTO expense_tag VALUES (
 'mercado'
 );
 INSERT INTO expense_tag VALUES (
+'exp_5',
+'mercado'
+);
+INSERT INTO expense_tag VALUES (
 'exp_id123',
 'compra-de-ovos'
+);
+INSERT INTO expense_tag VALUES (
+'exp_3',
+'farmacia'
+);
+INSERT INTO expense_tag VALUES (
+'exp_6',
+'farmacia'
 );
