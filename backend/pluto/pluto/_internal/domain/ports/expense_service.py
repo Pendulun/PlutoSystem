@@ -30,3 +30,7 @@ class IExpenseService(ABC):
     @abstractmethod
     def list_expense(self, filters: Dict[str, Any]) -> List[Expense]:
         pass
+
+    @abstractmethod
+    def add_tag_for_expense(self, tag_name:str, exp_id:str):
+        pass

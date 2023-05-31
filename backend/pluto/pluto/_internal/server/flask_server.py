@@ -191,9 +191,18 @@ class FlaskServerWrapper(Server):
         return dump_resp(expense_service.list_expense(filters))
 
     def add_expense(self):
-        expense_dict = request.get_json(force=True)
+        incoming_dict = request.get_json(force=True)
+        tag = incoming_dict['tag_name'] if 'tag_name' in incoming_dict else None
+        expense_dict = dict(incoming_dict)
+
+        if tag != None:
+            del expense_dict['tag_name']
+
         expense_service = ExpenseServiceImpl(Server.DB_IMP)
-        expense_service.add_expense_from_dict_without_id(expense_dict)
+        exp_id = expense_service.add_expense_from_dict_without_id(expense_dict)
+        if tag != None:
+            expense_service.add_tag_for_expense(tag, exp_id)
+
         return dump_resp()
 
     def expense_file_upload(self):
