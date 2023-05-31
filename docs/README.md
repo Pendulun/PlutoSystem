@@ -17,6 +17,12 @@ O PlutoSystem é um sistema de gerenciamento de finanças pessoais. Nesse sistem
 3. Banco de Dados: postgresql
 4. Framework para desenvolvimento frontend: React
 
+## Arquitetura
+
+O sistema foi implementado seguindo a [Arquitetura Hexagonal](https://engsoftmoderna.info/artigos/arquitetura-hexagonal.html). Nessa arquitetura, existe uma divisão entre as classes de domínio e as classes de não domínio. As classes de domínio são caracterizadas por serem, de acordo com os princípios de [Domain Driven Design](https://engsoftmoderna.info/artigos/ddd.html), Entidades e Objetos de Valor, além de Portas de saída e de entrada de acordo com a linguagem da Arquitetura Hexagonal. Já as de não domínio são todas as classes que utilizam tecnologias externas como, por exemplo, conexões com banco de dados específicos. Essas classes são, comumente, na linguagem de Arquitetura Hexagonal, Adaptadores . O diagrama a seguir expõe a arquitetura do nosso sistema:
+
+![Diagrama da Arquitetura do PlutoSystem](arq_PDSdrawio(2).png)
+
 ## Backlog do Produto
 
 1. Eu, como usuário, gostaria de adicionar despesas e receitas
