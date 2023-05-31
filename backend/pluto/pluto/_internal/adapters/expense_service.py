@@ -33,9 +33,11 @@ class ExpenseServiceImpl(IExpenseService):
 
         return expenses
 
-    def add_expense_from_dict_without_id(self, expense_dict: dict) -> None:
+    def add_expense_from_dict_without_id(self, expense_dict: dict) -> str:
+        "Returns the expense id"
         expense = Expense.new(**expense_dict)
         self.add_expense(expense)
+        return expense.id
 
     def add_expense(self, expense: Expense):
         self._sm.insert(ExpenseServiceImpl._expense_table, expense.dict())
@@ -54,8 +56,7 @@ class ExpenseServiceImpl(IExpenseService):
         for expense, tags in expenses_and_tags_to_add:
             self.add_expense(expense)
             for tag in tags:
-                # Call method to add tag to expense
-                pass
+                self.add_tag_for_expense(tag, expense.id)
 
     def _extract_expenses_and_tags_from_file(
         self, user_id, file
@@ -116,3 +117,6 @@ class ExpenseServiceImpl(IExpenseService):
             ExpenseServiceImpl._expense_table, conditions
         )
         return [Expense.from_complete_dict(result) for result in results]
+
+    def add_tag_for_expense(self, tag_name: str, exp_id: str) -> None:
+        self._sm.insert("expense_tag", {"expense_id": exp_id, "tag_name": tag_name})
