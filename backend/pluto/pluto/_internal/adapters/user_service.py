@@ -13,5 +13,8 @@ class UserServiceImpl(IUserService):
         user = User.new(**user_dict)
         self._sm.insert(IUserService._user_table, user.dict())
 
-    def list_user(self) -> List[User]:
-        return self._sm.select_star(UserServiceImpl._user_table)
+    def get_user(self, user_id: str) -> List[User]:
+        return self._sm.select_star_where_equal(
+            table=UserServiceImpl._user_table,
+            and_conditions=dict(id=user_id),
+        )
