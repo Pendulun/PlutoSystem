@@ -16,12 +16,10 @@ class ExpenseServiceImpl(IExpenseService):
         super().__init__(sm)
 
     def list_expense(self, filters: Dict[str, Any]) -> List[Expense]:
+        print("CHEGOU LIST EXPENSE")
         if len(filters) == 0:
             expense_dicts = self._sm.select_star(ExpenseServiceImpl._expense_table)
         else:
-            if IExpenseService.list_expense_filter_tag_name not in filters:
-                raise ValueError(f"invalid filters: {filters}")
-            filter_by_tag = filters[IExpenseService.list_expense_filter_tag_name]
             expense_dicts = self._sm.select_join_where_equal(
                 cols=Expense.fields(),
                 tables=(
@@ -29,8 +27,10 @@ class ExpenseServiceImpl(IExpenseService):
                     ExpenseServiceImpl._expense_tag_table,
                 ),
                 join_condition=("id", "expense_id"),
-                and_conditions=dict(tag_name=filter_by_tag),
+                and_conditions=filters,
             )
+
+        print(expense_dicts)
         expenses = [Expense(**d) for d in expense_dicts]
 
         return expenses

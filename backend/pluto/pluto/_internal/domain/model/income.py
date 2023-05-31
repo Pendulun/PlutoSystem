@@ -29,3 +29,13 @@ class Income:
         id, user_id, src, amount, inc_date
         """
         return Income(**income_dict)
+
+    def to_dict(self):
+        my_dict = {
+            "user_id": self.user_id,
+            "id": self.id,
+            "src": self.src,
+            "amount": self.amount,
+            "inc_date": self.inc_date.strftime("%d/%m/%Y"),
+        }
+        return my_dict

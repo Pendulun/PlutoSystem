@@ -65,6 +65,7 @@ class SQLStorageManager(Database):
     ):
         q = "SELECT {} FROM {} WHERE ".format(self._fmtsqlcols(cols), table)
         q += self._where_equal_str(and_conditions)
+        print(f"QUERY: {q}")
         return self.query(q)
 
     # select_star_where_equal selects all elements that match given conditions.
