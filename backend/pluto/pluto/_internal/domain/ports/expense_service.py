@@ -16,7 +16,7 @@ class IExpenseService(ABC):
         self._sm = sm
 
     @abstractmethod
-    def add_expense_from_dict_without_id(self, expense_dict: dict) -> None:
+    def add_expense_from_dict_without_id(self, expense_dict: dict) -> str:
         pass
 
     @abstractmethod
@@ -32,5 +32,5 @@ class IExpenseService(ABC):
         pass
 
     @abstractmethod
-    def add_tag_for_expense(self, tag_name:str, exp_id:str):
+    def add_tag_for_expense(self, tag_name: str, exp_id: str) -> None:
         pass

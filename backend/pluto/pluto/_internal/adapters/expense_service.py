@@ -117,6 +117,6 @@ class ExpenseServiceImpl(IExpenseService):
             ExpenseServiceImpl._expense_table, conditions
         )
         return [Expense.from_complete_dict(result) for result in results]
-    
+
     def add_tag_for_expense(self, tag_name: str, exp_id: str) -> None:
-        self._sm.insert("expense_tag", {"expense_id":exp_id, 'tag_name':tag_name})
+        self._sm.insert("expense_tag", {"expense_id": exp_id, "tag_name": tag_name})
