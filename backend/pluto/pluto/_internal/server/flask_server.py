@@ -24,6 +24,14 @@ logger = log.logger()
 # https://dev.to/nandamtejas/implementing-flask-application-using-object-oriented-programming-oops-part-2-4507
 def make_flask_server(config: Config, database: Database) -> Server:
     flask_app = Flask("pluto")
+
+    @flask_app.after_request
+    def enable_cors_all(response):
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Headers", "*")
+        response.headers.add("Access-Control-Allow-Methods", "*")
+        return response
+
     server = FlaskServerWrapper(flask_app, config, database)
 
     from pluto._internal.dash.expenses.callbacks import \
