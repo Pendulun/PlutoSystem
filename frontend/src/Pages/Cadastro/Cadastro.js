@@ -11,10 +11,11 @@ const handleSubmit = () => {
     password: senha
   };
 
-  axios.post('http://127.0.0.1:5000/users', dadosUsuario)
+  axios.post('http://127.0.0.1:5000/users/', dadosUsuario)
     .then(response => {
       // Faça algo após o cadastro ser realizado com sucesso
       alert('Cadastro realizado com sucesso!');
+      window.location.href = '/'
     })
     .catch(error => {
       // Faça algo em caso de erro no cadastro
@@ -27,8 +28,8 @@ export const Cadastro = () =>{
   
   const handleClickLogin = () => {
     //Navegar para a tela de Login
-    const cadastroUrl = '/';
-    window.location.href = cadastroUrl;
+    const cadastroUrl = '/'
+    window.location.href = cadastroUrl
   }
 
   return (

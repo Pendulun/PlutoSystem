@@ -1,1 +1,1 @@
-export * from './Rendas';
+export { Rendas } from './Rendas';

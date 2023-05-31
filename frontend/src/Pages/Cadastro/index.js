@@ -1,1 +1,1 @@
-export * from './Cadastro';
+export { Cadastro } from './Cadastro';

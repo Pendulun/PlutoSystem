@@ -1,1 +1,1 @@
-export * from './Despesas';
+export { Despesas } from './Despesas';

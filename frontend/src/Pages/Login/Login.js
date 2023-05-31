@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export const Login = () => {
-
   const handleSubmit = () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -10,11 +9,11 @@ export const Login = () => {
       email: email,
       password: password
     };
-  
+
     axios.get('http://127.0.0.1:5000/users/', {params: dadosLogin} )
       .then(response => {
-        // Faça algo após o login ser realizado com sucesso
-        alert('Login realizado com sucesso!');
+        localStorage.setItem('user', JSON.stringify(response?.data[0]));
+        window.location.href = '/home';
       })
       .catch(error => {
         // Faça algo em caso de erro no login
