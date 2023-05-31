@@ -186,7 +186,7 @@ class FlaskServerWrapper(Server):
         self.app.run(debug=True, **kwargs)
 
     def list_expenses(self) -> Dict[Any, Any]:
-        filters: Dict[str, Any] = request.get_json(force=True)
+        filters: Dict[str, Any] = request.args
         expense_service = ExpenseServiceImpl(Server.DB_IMP)
         return dump_resp(expense_service.list_expense(filters))
 
