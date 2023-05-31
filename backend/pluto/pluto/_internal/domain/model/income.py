@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from datetime import datetime
-from typing import Dict
+from typing import Dict, List
 
 from pluto._internal.utils.id import new_id
 
@@ -29,6 +29,10 @@ class Income:
         id, user_id, src, amount, inc_date
         """
         return Income(**income_dict)
+
+    @staticmethod
+    def fields() -> List[str]:
+        return [field_name for field_name in Income.__dataclass_fields__]
 
     def to_dict(self):
         my_dict = {

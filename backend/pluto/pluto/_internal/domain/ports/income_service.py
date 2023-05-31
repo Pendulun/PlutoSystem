@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import Any, Dict, List
 
 from pluto._internal.domain.model.income import Income
 from pluto._internal.domain.ports.database import Database
@@ -12,7 +12,7 @@ class IIncomeService(ABC):
         self._sm = sm
 
     @abstractmethod
-    def list_income(self) -> List[Income]:
+    def list_income(self, filters: Dict[str, Any]) -> List[Income]:
         pass
 
     @abstractmethod
