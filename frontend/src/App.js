@@ -1,16 +1,11 @@
-import React from 'react';
-
-import Home from './Pages/Home/Home';
-import Login from './Pages/Login/Login';
-import Cadastro from './Pages/Cadastro/Cadastro';
-import Perfil from './Pages/Perfil/Perfil';
-import Despesas from './Pages/Despesas/Despesas';
-import Rendas from './Pages/Rendas/Rendas';
-
+import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Home, Login, Cadastro, Rendas, Despesas, Estatisticas, Perfil } from './Pages'
+import { AppProvider } from './Context'
 
 function App() {
   return (
+    <AppProvider>
       <BrowserRouter>
           <Routes>
             <Route path='/' element={<Login/>} />
@@ -19,8 +14,10 @@ function App() {
             <Route path='/perfil' element={<Perfil/>} />
             <Route path='/despesas' element={<Despesas/>} />
             <Route path='/rendas' element={<Rendas/>} />
+            <Route path='/estatisticas' element={<Estatisticas/>} />
           </Routes>
       </BrowserRouter>
+    </AppProvider>
   )
 }
 

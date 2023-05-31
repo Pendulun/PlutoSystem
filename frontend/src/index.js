@@ -18,5 +18,5 @@ root.render(
       {isLogged && <TabBar/>}
       <App />
     </QueryClientProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 )

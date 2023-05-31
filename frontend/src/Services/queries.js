@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useQuery, useMutation } from 'react-query'
+import { useQuery } from 'react-query'
 
 const BASE_URL = 'http://127.0.0.1:5000'
 
