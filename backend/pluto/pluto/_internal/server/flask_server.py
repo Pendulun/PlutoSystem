@@ -142,8 +142,8 @@ class FlaskServerWrapper(Server):
     def _add_user_endpoints(self):
         self.add_endpoint(
             "/users/",
-            "list_user",
-            self.list_user,
+            "get_user",
+            self.get_user,
             methods=["GET"],
         )
         self.add_endpoint(
@@ -232,9 +232,11 @@ class FlaskServerWrapper(Server):
         finally:
             return redirect(request.url)
 
-    def list_user(self):
+    def get_user(self):
+        user_dict = request.get_json(force=True)
+        email = user_dict["email"]
         user_service = UserServiceImpl(Server.DB_IMP)
-        return dump_resp(user_service.list_user())
+        return dump_resp(user_service.get_user(email))
 
     def add_user(self):
         user_dict = request.get_json(force=True)

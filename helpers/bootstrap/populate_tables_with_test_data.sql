@@ -3,27 +3,27 @@
 -- Putin
 INSERT INTO users VALUES (
   'putin',
-  'Vladimir',
-  'Putin'
+  'Vladimir Putin',
+  'vlad@gg.com'
 );
 -- B J
 INSERT INTO users VALUES (
   'bj',
-  'B',
-  'J'
+  'B J',
+  'bj@gg.com'
 );
 -- Zelensky
 INSERT INTO users VALUES (
   'zelensky',
-  'Volodymyr',
-  'Zelensky'
+  'Volodymyr Zelensky',
+  'volodo@gg.com'
 );
 
 -- Daniel
 INSERT INTO users VALUES (
   'daniel',
-  'Daniel',
-  'Campos'
+  'Daniel Campos',
+  'dan@gg.com'
 );
 
 ---- Add incomes
