@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, Dict, List
 
 from pluto._internal.domain.model.income import Income
 from pluto._internal.domain.ports.database import Database
@@ -9,8 +9,19 @@ class IncomeServiceImpl(IIncomeService):
     def __init__(self, sm: Database) -> None:
         super().__init__(sm)
 
-    def list_income(self) -> List[Income]:
-        return self._sm.select_star(IncomeServiceImpl._income_table)
+    def list_income(self, filters: Dict[str, Any]) -> List[Income]:
+        if len(filters) == 0:
+            income_dicts = self._sm.select_star(IIncomeService._income_table)
+        else:
+            income_dicts = self._sm.select_where_equal(
+                cols=Income.fields(),
+                table=IncomeServiceImpl._income_table,
+                and_conditions=filters,
+            )
+
+        incomes = [Income(**d) for d in income_dicts]
+
+        return incomes
 
     def add_income(self, income_dict: dict) -> None:
         income = Income.new(**income_dict)

@@ -214,8 +214,11 @@ class FlaskServerWrapper(Server):
             return redirect(request.url)
 
     def list_income(self):
+        args = request.args
+        user_id = args["user_id"]
+        filter_dict = {"user_id": user_id}
         income_service = IncomeServiceImpl(Server.DB_IMP)
-        return dump_resp(income_service.list_income())
+        return dump_resp(income_service.list_income(filter_dict))
 
     def add_income(self):
         income_dict = request.get_json(force=True)
