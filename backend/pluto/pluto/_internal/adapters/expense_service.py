@@ -15,7 +15,9 @@ class ExpenseServiceImpl(IExpenseService):
     def __init__(self, sm: Database) -> None:
         super().__init__(sm)
 
-    def list_expense(self, filters: Dict[str, Any]) -> List[Expense]:
+    def list_expense(
+        self, filters: Dict[str, Any]
+    ) -> IExpenseService.ListExpenseResponse:
         if len(filters) == 0:
             expense_dicts = self._sm.select_star(ExpenseServiceImpl._expense_table)
         else:
@@ -30,8 +32,12 @@ class ExpenseServiceImpl(IExpenseService):
             )
 
         expenses = [Expense(**d) for d in expense_dicts]
+        resp = {
+            "expenses": expenses,
+            "filters": filters,
+        }
 
-        return expenses
+        return resp
 
     def add_expense_from_dict_without_id(self, expense_dict: dict) -> str:
         "Returns the expense id"

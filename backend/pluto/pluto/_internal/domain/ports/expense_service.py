@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from typing import Any, Collection, Dict
 
 from pluto._internal.domain.model.expense import Expense
 from pluto._internal.domain.ports.database import Database
@@ -11,6 +11,9 @@ class IExpenseService(ABC):
 
     list_expense_filter_tag_name = "tag_name"
     list_expense_filters = [list_expense_filter_tag_name]
+
+    # ListExpenseResponse is a list of expense id to
+    ListExpenseResponse = Dict[str, Collection[object]]
 
     def __init__(self, sm: Database) -> None:
         self._sm = sm
@@ -28,7 +31,9 @@ class IExpenseService(ABC):
         pass
 
     @abstractmethod
-    def list_expense(self, filters: Dict[str, Any]) -> List[Expense]:
+    def list_expense(
+        self, filters: Dict[str, Any]
+    ) -> "IExpenseService.ListExpenseResponse":
         pass
 
     @abstractmethod
