@@ -9,7 +9,6 @@ from pluto._internal.domain.model.income import Income
 class EnhancedJSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, Income) or isinstance(o, Expense):
-            print("DETECTOU")
             return o.to_dict()
 
         if dataclasses.is_dataclass(o):

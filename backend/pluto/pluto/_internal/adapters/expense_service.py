@@ -16,7 +16,6 @@ class ExpenseServiceImpl(IExpenseService):
         super().__init__(sm)
 
     def list_expense(self, filters: Dict[str, Any]) -> List[Expense]:
-        print("CHEGOU LIST EXPENSE")
         if len(filters) == 0:
             expense_dicts = self._sm.select_star(ExpenseServiceImpl._expense_table)
         else:
@@ -29,8 +28,7 @@ class ExpenseServiceImpl(IExpenseService):
                 join_condition=("id", "expense_id"),
                 and_conditions=filters,
             )
-
-        print(expense_dicts)
+            
         expenses = [Expense(**d) for d in expense_dicts]
 
         return expenses
