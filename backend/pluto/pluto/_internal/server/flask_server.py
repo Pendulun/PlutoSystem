@@ -241,8 +241,8 @@ class FlaskServerWrapper(Server):
             return redirect(request.url)
 
     def get_user(self):
-        user_dict = request.get_json(force=True)
-        email = user_dict["email"]
+        args = request.args
+        email = args["email"]
         user_service = UserServiceImpl(Server.DB_IMP)
         return dump_resp(user_service.get_user(email))
 
