@@ -28,7 +28,7 @@ class ExpenseServiceImpl(IExpenseService):
                 join_condition=("id", "expense_id"),
                 and_conditions=filters,
             )
-            
+
         expenses = [Expense(**d) for d in expense_dicts]
 
         return expenses
