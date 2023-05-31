@@ -234,9 +234,9 @@ class FlaskServerWrapper(Server):
 
     def get_user(self):
         user_dict = request.get_json(force=True)
-        user_id = user_dict["user_id"]
+        email = user_dict["email"]
         user_service = UserServiceImpl(Server.DB_IMP)
-        return dump_resp(user_service.get_user(user_id))
+        return dump_resp(user_service.get_user(email))
 
     def add_user(self):
         user_dict = request.get_json(force=True)
