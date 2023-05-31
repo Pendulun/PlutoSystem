@@ -23,12 +23,6 @@ const handleSubmit = () => {
     });
 }
 
-const handleClickHome = () => {
-  //Navegar para a tela de Login
-  const cadastroUrl = '/';
-  window.location.href = cadastroUrl;
-}
-
 export const Cadastro = () =>{
   
   const handleClickLogin = () => {
