@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, Union
 
 import dash  # type: ignore
 from flask import Flask, Request, make_response, request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 from pluto._internal.adapters.expense_service import ExpenseServiceImpl
