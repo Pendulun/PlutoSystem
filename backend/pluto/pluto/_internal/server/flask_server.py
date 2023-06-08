@@ -5,6 +5,7 @@ from typing import Any, Callable, Dict, Union
 
 import dash  # type: ignore
 from flask import Flask, Request, make_response, request
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 
 from pluto._internal.adapters.expense_service import ExpenseServiceImpl
@@ -24,6 +25,7 @@ logger = log.logger()
 # https://dev.to/nandamtejas/implementing-flask-application-using-object-oriented-programming-oops-part-2-4507
 def make_flask_server(config: Config, database: Database) -> Server:
     flask_app = Flask("pluto")
+    CORS(flask_app, resources={r"/*": {"origins": "*"}})
 
     @flask_app.after_request
     def enable_cors_all(response):
