@@ -1,14 +1,19 @@
-import { useState, useMemo } from "react"
-import axios from 'axios'
+import { useMemo, useState } from "react"
+import { toast } from 'react-hot-toast'
+import { ImportButton, Loading } from '../../Components'
+import { useData } from '../../Hooks/useData'
+import { useMutationUploadIncomes, useQueryListIncomes } from "../../Services/queries"
 import { ListItemIncome } from "../Home/Components/ListItem.js"
 import { IconDeletarConta } from '../Perfil/components/Icons/opcoes_estaticas.js'
-import { useUserContext } from "../../Context/useContextValues.js"
 
 export const Rendas = () => {
-  const { user } = useUserContext()
+  const { getArrTotal } = useData()
   const [file, setFile] = useState()
-  const [incomes, setIncomes] = useState()
 
+  const user = JSON.parse(localStorage?.getItem('user'))
+  const { data: incomes = [], isLoading, isError } = useQueryListIncomes(user.id)
+
+  const upload = useMutationUploadIncomes(user.id)
 
   const selectFile = (e) => {
     e.preventDefault()
@@ -20,49 +25,38 @@ export const Rendas = () => {
     setFile()
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
+  function reloadPage() {
+    document.location.reload()
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
     var modelForm = new FormData()
     modelForm.append('user_id', user.id)
     modelForm.append('file', file)
 
-    axios.post(`http://127.0.0.1:5000/upload/incomes/?user_id=${user.id}`, modelForm)
-    .then(response => {
-      window.location.reload(true);
+    upload.mutate(modelForm, {
+      onSuccess: () => {
+        toast.success('Arquivo recebido com sucesso', { duration: 4000 })
+        setTimeout(reloadPage, 2600)
+        setFile()
+      },
+      onError: (error) => {
+        toast.error(error)
+      },
     })
-    .catch(error => {
-      // Faça algo em caso de erro no cadastro
-      console.error('Ocorreu um erro:', error);
-    });
   }
 
-  const _incomes = useMemo(() => {
-    axios.get(`http://127.0.0.1:5000/incomes/?user_id=${user.id}`)
-    .then(response => {
-      setIncomes(response.data)
-    })
-    .catch(error => {
-      console.error('Ocorreu um erro:', error);
-    });
-  }, [user.id])
+  const totalIncomes = useMemo(() => getArrTotal(incomes), [incomes, getArrTotal])
 
-  const getTotal = (array) => array?.reduce((acumulador, elemento) => acumulador + elemento.amount, 0)
-  const totalIncomes = getTotal(incomes)
+  if (isLoading) return <Loading/>
+  if (isError) toast.error('Erro ao carregar informações, por favor atualize a página')
 
   return (
-    <>
+    <div class="mb-[80px]">
       <div class="flex w-full h-auto justify-between items-center ">
         <div class="text-white font-Inter font-semibold text-xl">Rendas</div>
-        <label for="fileInput" type='button' class="w-24 h-[28px] bg-darkTeal rounded-full text-white text-sm font-Inter inline-flex items-center justify-center">
-            {file ? (
-                <button class="text-sm text-white" onClick={handleSubmit}>Enviar</button>
-            ) : (
-              <>
-                <input onChange={selectFile} id="fileInput" type="file"  accept='.csv' style={{ display: 'none' }} class="ml-[16px] text-sm text-white"/>
-                Importar
-              </>
-            )}
-        </label>
+        <ImportButton file={file} handleSubmit={handleSubmit} selectFile={selectFile}/>
       </div>
 
       {file && (
@@ -81,7 +75,7 @@ export const Rendas = () => {
           </div>
         </div>
 
-        <div class="mt-[40px] mx-5 mb-[90px]">
+        <div class="mt-[40px] mx-5">
           <h1 class="text-lighterGray font-black text-bs mb-[10px] mt-[40px] text-center">Histórico</h1>
           <hr class="text-lightGray mb-[25px]"/>
           {incomes?.map((item) => (
@@ -91,8 +85,8 @@ export const Rendas = () => {
           <ListItemIncome title={'Total'} value={totalIncomes}/>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
-export default Rendas;
+export default Rendas

@@ -1,14 +1,17 @@
-import { IconEditar } from './components/Icons/icon_editar.js';
-//  import { IconMudarNomeUsuario, IconMudarEmail, IconDeletarConta, IconTermosECondicoes } from './components/Icons/opcoes_estaticas.js';
-//  import { AccountButton } from './components/AccountButton.js'
-import { useUserContext } from '../../Context/useContextValues.js';
+import {
+  AccountButton,
+  IconDeletarConta,
+  IconEditar,
+  IconMudarEmail,
+  IconMudarNomeUsuario,
+  IconTermosECondicoes
+} from './components'
 
 export const Perfil = () => {
-  const { user, clearUserData } = useUserContext()
+  const user = JSON.parse(localStorage?.getItem('user'))
 
   const handleClickLogin = () => {
     window.location.href = '/'
-    clearUserData()
   }
 
   return (
@@ -20,10 +23,10 @@ export const Perfil = () => {
         <IconEditar/>
       </div>
 
-      <div class="text-white font-Inter font-bold text-rg mt-[30px]">{user?.name}</div>
-      <div class="text-white font-Inter font-normal text-bs mb-[60px]">{user?.email}</div>
+      <div data-cy="name" class="text-white font-Inter font-bold text-rg mt-[30px]">{user?.name}</div>
+      <div data-cy="email" class="text-white font-Inter font-normal text-bs mb-[60px]">{user?.email}</div>
       
-      {/* <div class="w-full justify-start text-bs">
+      <div class="w-full justify-start text-bs">
         <AccountButton title='Mudar nome do Usuário' icon={<IconMudarNomeUsuario/>}/>
         <hr class="text-gray5 mb-[22px]"></hr>
 
@@ -35,7 +38,7 @@ export const Perfil = () => {
 
         <AccountButton title='Termos e condições' icon={<IconTermosECondicoes/>}/>
         <hr class="text-gray5 mb-[22px]"></hr>
-      </div> */}
+      </div>
 
       <button class="mt-[40px] w-[218px] h-[40px] bg-darkTeal rounded-lg" onClick={handleClickLogin}><span class="text-white text-sm font-bold">Sair</span></button>
     </div>

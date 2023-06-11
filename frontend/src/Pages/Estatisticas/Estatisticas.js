@@ -4,8 +4,8 @@ export const Estatisticas = () => {
   const user = JSON.parse(localStorage?.getItem('user'));
 
   return (
-    <div class="text-center mx-auto max-w-[1000px]">
-      <div class="text-white font-Inter font-semibold text-xl">Estatisticas</div>
+    <div class="text-center mx-auto max-w-[1000px] mb-[80px]">
+      <div class="text-white font-Inter font-semibold text-xl">Estatísticas</div>
       <div class="mx-auto gap-8 mt-[60px]">
         <div class="">          
          <div class="w-full p-5 bg-white rounded-xl flex items-center justify-center">
