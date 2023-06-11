@@ -24,6 +24,7 @@ types-requests = "^2.30.0.0"
 requests = "^2.30.0"
 dash = "^2.10.0"
 pandas = "^2.0.1"
+pytest-cov = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]

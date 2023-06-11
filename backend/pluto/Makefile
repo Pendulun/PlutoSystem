@@ -15,7 +15,7 @@ lint-check:
 	poetry run mypy pluto
 
 unittest:
-	poetry run pytest $(PYTEST_FLAGS)
+	poetry run pytest -o log_cli=true --cov-report=term --cov=pluto $(PYTEST_FLAGS)
 test: unittest
 
 check: lint-check test
