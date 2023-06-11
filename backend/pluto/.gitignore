@@ -12,3 +12,4 @@ venv
 
 # Coverage
 .coverage
+htmlcov

@@ -19,7 +19,7 @@ class Income:
 
     @staticmethod
     def new(user_id: str, src: str, amount: int) -> Income:
-        curr_date = datetime.today().strftime("%d/%m/%Y")
+        curr_date = datetime.today().strftime("%Y-%m-%d")
         return Income(new_id(), user_id, src, amount, curr_date)
 
     @staticmethod
@@ -40,6 +40,6 @@ class Income:
             "id": self.id,
             "src": self.src,
             "amount": self.amount,
-            "inc_date": self.inc_date.strftime("%d/%m/%Y"),
+            "inc_date": self.inc_date.strftime("%Y-%m-%d"),
         }
         return my_dict
