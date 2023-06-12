@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Home, Login, Cadastro, Rendas, Despesas, Estatisticas, Perfil } from './Pages'
 import { AppProvider } from './Context'
+import { Cadastro, Despesas, Estatisticas, Home, Login, Perfil, Rendas } from './Pages'
 
 function App() {
   return (

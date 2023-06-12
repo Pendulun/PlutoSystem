@@ -1,22 +1,37 @@
-import React, { useState, useMemo } from 'react'
-import axios from 'axios';
+import React, { useState } from 'react'
+import { toast } from 'react-hot-toast'
+import { ImportButton, Loading } from '../../Components'
+import { useMutationUploadExpenses, useQueryListExpensesTag } from '../../Services/queries'
 import { ListItemExpense } from '../Home/Components/ListItem'
 import { IconDeletarConta } from '../Perfil/components/Icons/opcoes_estaticas.js'
-import { useUserContext } from "../../Context/useContextValues.js"
+import { TagButton } from './Components/TagButton/TagButton'
 
 export const Despesas = () => {
-  const { user } = useUserContext()
-  const [file, setFile] = useState();
-  const [expenses, setExpenses] = useState()
+  const [file, setFile] = useState()
+  const [tag, setTag] = useState()
+
+  const user = JSON.parse(localStorage?.getItem('user'))
+
+  const { data: { expenses } = [], isLoading, isError, refetch } = useQueryListExpensesTag(user.id, tag)
+  const upload = useMutationUploadExpenses(user.id)
 
   const selectFile = (e) => {
     e.preventDefault()
-    setFile(e.target.files[0]);
+    setFile(e.target.files[0])
   }
 
   const handleDelete = (e) => {
     e.preventDefault()
     setFile()
+  }
+
+  const handleTagChange = (tag) => {
+    setTag(tag)
+    setTimeout(refetch, 100)
+  }
+
+  function reloadPage() {
+    document.location.reload()
   }
 
   const handleSubmit = (event) => {
@@ -25,40 +40,26 @@ export const Despesas = () => {
     modelForm.append('user_id', user.id)
     modelForm.append('file', file)
 
-    axios.post('http://localhost:5000/upload/expenses/', modelForm)
-    .then(response => {
-      window.location.reload(true);
+    upload.mutate(modelForm, {
+      onSuccess: () => {
+        toast.success('Arquivo recebido com sucesso', { duration: 5000})
+        setTimeout(reloadPage, 2600)
+        setFile()
+      },
+      onError: (error) => {
+        toast.error(error)
+      },
     })
-    .catch(error => {
-      // Faça algo em caso de erro no cadastro
-      console.error('Ocorreu um erro:', error);
-    });
   }
 
-  const _expenses = useMemo(() => {
-    axios.get(`http://127.0.0.1:5000/expenses/?user_id=${user.id}`)
-    .then(response => {
-      setExpenses(response.data) 
-    })
-    .catch(error => {
-      console.error('Ocorreu um erro:', error);
-    });
-  }, [user.id])
+  if (isLoading) return <Loading/>
+  if (isError) toast.error('Erro ao carregar informações, por favor atualize a página')
 
   return (
-    <>
-      <div class="flex w-full h-auto justify-between items-center ">
+    <div class="mb-[80px]">
+      <div class="flex w-full h-auto justify-between items-center">
         <div class="text-white font-Inter font-semibold text-xl">Despesas</div>
-        <label for="fileInput" type='button' class="w-24 h-[28px] bg-darkTeal rounded-full text-white text-sm font-Inter inline-flex items-center justify-center">
-            {file ? (
-                <button onClick={handleSubmit} class="text-sm text-white">Enviar</button>
-            ) : (
-              <>
-                <input onChange={selectFile} id="fileInput" type="file"  accept='.csv' style={{ display: 'none' }} class="ml-[16px] text-sm text-white"/>
-                Importar
-              </>
-            )}
-        </label>
+        <ImportButton file={file} handleSubmit={handleSubmit} selectFile={selectFile}/>
       </div>
 
       {file && (
@@ -71,19 +72,18 @@ export const Despesas = () => {
       )}
 
       <div class="grid grid-cols-1 md:grid-cols-2 mx-auto gap-8 mt-[60px]">
-        <div class="">          
-         <div class="w-full p-5 bg-white rounded-xl flex items-center justify-center">
-            <iframe src={`http://localhost:5000/dash_expenses/${user?.id}`} title='plot view' width={1000} height={450}/>
-          </div>
+        <div class="w-full p-5 bg-white rounded-xl flex items-center justify-center">
+          <iframe src={`http://localhost:5000/dash_expenses/${user?.id}`} title='plot view' width={1000} height={450}/>
         </div>
         
         {expenses?.length > 0 && (
-        <div class="mt-[40px] overflow-x-scroll mb-[100px]">
-          <div class="flex items-center justify-center ">
-            <button class="text-gray3 font-semibold font-Inter hover:bg-gray hover:text-lightBlue border-b-2 border-transparent hover:border-lightBlue py-2 px-6 rounded-t-2xl">Tudo</button>
-            <button class="text-gray3 font-semibold font-Inter hover:bg-gray hover:text-lightBlue border-b-2 border-transparent hover:border-lightBlue py-2 px-6 rounded-t-2xl">Salário</button>
-            <button class="text-gray3 font-semibold font-Inter hover:bg-gray hover:text-lightBlue border-b-2 border-transparent hover:border-lightBlue py-2 px-6 rounded-t-2xl">Investimentos</button>
+        <div class="mt-[40px]">
+          <div class="flex items-center justify-center">
+            <TagButton tagId={1} title='Tudo' onClick={() => handleTagChange('')} />
+            <TagButton tagId={2} title='Farmácia' onClick={() => handleTagChange('farmacia')}/>
+            <TagButton tagId={3} title='Mercado' onClick={() => handleTagChange('mercado')}/>
           </div>
+
           <div class="mt-[40px]">
             {expenses?.map((item) => (
               <ListItemExpense title={item?.src} value={item?.amount}/>
@@ -92,12 +92,8 @@ export const Despesas = () => {
         </div>
         )}
       </div>
-
-      {/* <div class="flex w-full h-auto justify-between items-center">
-        <button class="mt-[40px] w-[218px] mx-auto h-[40px] bg-darkTeal rounded-lg mb-[120px]" ><span class="text-white text-sm font-bold">Adicionar Despesa</span></button>
-      </div> */}
-    </>
+    </div>
   )
 }
 
-export default Despesas;
+export default Despesas
