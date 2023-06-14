@@ -25,7 +25,7 @@ class TestStorageManager:
         real_storemgr_configured.insert("users", putin_user)
         real_storemgr_configured.insert("users", bj_user)
         expected = [
-            {"id": "putin", "name": "vladimir putin", "email": "putin@massacre.death",
+            {"id": "putin", "name": "vladimir putin", "email": "putin@russia.ru",
              "password": "123"},
             {"id": "bj", "name": "b j", "email": "bj@b.j", "password": "321"},
         ]

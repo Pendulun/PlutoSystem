@@ -32,7 +32,6 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       PLUTO_TEST: ${PLUTO_TEST:-true}
-      PGDATESTYLE: ${PGDATESTYLE}
     restart: on-failure
     depends_on:
       - pluto_pg

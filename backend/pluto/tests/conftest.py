@@ -140,7 +140,7 @@ def putin_user():
     return dict(
         id="putin",
         name="vladimir putin",
-        email="putin@massacre.death",
+        email="putin@russia.ru",
         password="123"
     )
 
