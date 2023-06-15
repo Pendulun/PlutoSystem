@@ -9,3 +9,7 @@
 
 # venv
 venv
+
+# Coverage
+.coverage
+htmlcov

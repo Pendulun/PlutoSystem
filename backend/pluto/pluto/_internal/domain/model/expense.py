@@ -17,7 +17,7 @@ class Expense:
 
     @staticmethod
     def new(user_id: str, src: str, amount: float) -> "Expense":
-        curr_date = datetime.today().strftime("%d/%m/%Y")
+        curr_date = datetime.today().strftime("%Y-%m-%d")
         return Expense(new_id(), user_id, src, amount, curr_date)
 
     @staticmethod
@@ -38,6 +38,6 @@ class Expense:
             "id": self.id,
             "src": self.src,
             "amount": self.amount,
-            "exp_date": self.exp_date.strftime("%d/%m/%Y"),
+            "exp_date": self.exp_date.strftime("%Y-%m-%d"),
         }
         return my_dict

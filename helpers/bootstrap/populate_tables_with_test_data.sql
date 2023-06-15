@@ -33,21 +33,21 @@ INSERT INTO income VALUES (
   'putin',
   'Oil',
   10000,
-  '1/01/2023'
+  '2023-01-1'
 );
 INSERT INTO income VALUES (
   'putin-extortion',
   'putin',
   'Extortion',
   1370,
-  '1/02/2023'
+  '2023-02-1'
 );
 INSERT INTO income VALUES (
   'putin-child-trafficking',
   'putin',
   'Child trafficking',
   5000,
-  '1/03/2023'
+  '2023-03-1'
 );
 -- B J
 INSERT INTO income VALUES (
@@ -55,28 +55,28 @@ INSERT INTO income VALUES (
   'bj',
   'Human trafficking',
   10000,
-  '01/01/2023'
+  '2023-01-01'
 );
 INSERT INTO income VALUES (
   'bj-enslaving',
   'bj',
   'Enslaving',
   10532,
-  '01/02/2023'
+  '2023-02-01'
 );
 INSERT INTO income VALUES (
   'bj-covid',
   'bj',
   'Covid',
   2000,
-  '01/03/2023'
+  '2023-03-01'
 );
 INSERT INTO income VALUES (
   'bj-statization',
   'bj',
   'Statization',
   23647,
-  '01/04/2023'
+  '2023-04-01'
 );
 -- Zelensky
 INSERT INTO income VALUES (
@@ -84,7 +84,7 @@ INSERT INTO income VALUES (
   'zelensky',
   'Presidential salary',
   5000,
-  '01/02/2023'
+  '2023-02-01'
 );
 -- Daniel
 INSERT INTO income VALUES (
@@ -92,7 +92,7 @@ INSERT INTO income VALUES (
   'daniel',
   'Bolsa de Projeto',
   1000,
-  '01/02/2023'
+  '2023-02-01'
 );
 
 INSERT INTO income VALUES (
@@ -100,7 +100,7 @@ INSERT INTO income VALUES (
   'daniel',
   'Investimentos',
   5000,
-  '17/02/2023'
+  '2023-02-17'
 );
 
 INSERT INTO income VALUES (
@@ -108,7 +108,7 @@ INSERT INTO income VALUES (
   'daniel',
   'Mega-Sena',
   7000,
-  '29/02/2023'
+  '2023-02-29'
 );
 
 INSERT INTO income VALUES (
@@ -116,7 +116,7 @@ INSERT INTO income VALUES (
   'daniel',
   'Bolsa de Projeto',
   1000,
-  '01/03/2023'
+  '2023-03-01'
 );
 
 INSERT INTO income VALUES (
@@ -124,7 +124,7 @@ INSERT INTO income VALUES (
   'daniel',
   'Investimentos',
   2000,
-  '17/03/2023'
+  '2023-03-17'
 );
 
 INSERT INTO income VALUES (
@@ -132,7 +132,7 @@ INSERT INTO income VALUES (
   'daniel',
   'Mega-Sena',
   7500,
-  '29/03/2023'
+  '2023-03-29'
 );
 
 
@@ -142,7 +142,7 @@ INSERT INTO expense VALUES (
 'daniel',
 'compras do mês',
 453.21,
-'01/01/2023'
+'2023-01-01'
 );
 
 INSERT INTO expense VALUES (
@@ -150,7 +150,7 @@ INSERT INTO expense VALUES (
 'daniel',
 'compras do mês',
 60,
-'01/02/2023'
+'2023-02-01'
 );
 
 INSERT INTO expense VALUES (
@@ -158,7 +158,7 @@ INSERT INTO expense VALUES (
 'daniel',
 'EPA',
 60,
-'01/02/2023'
+'2023-02-01'
 );
 
 INSERT INTO expense VALUES (
@@ -166,7 +166,7 @@ INSERT INTO expense VALUES (
 'daniel',
 'Padaria',
 15,
-'06/02/2023'
+'2023-02-06'
 );
 
 INSERT INTO expense VALUES (
@@ -174,7 +174,7 @@ INSERT INTO expense VALUES (
 'daniel',
 'Farmácia',
 30,
-'17/02/2023'
+'2023-02-17'
 );
 
 INSERT INTO expense VALUES (
@@ -182,7 +182,7 @@ INSERT INTO expense VALUES (
 'daniel',
 'EPA',
 140,
-'01/03/2023'
+'2023-03-01'
 );
 
 INSERT INTO expense VALUES (
@@ -190,7 +190,7 @@ INSERT INTO expense VALUES (
 'daniel',
 'Padaria',
 25,
-'06/03/2023'
+'2023-03-06'
 );
 
 INSERT INTO expense VALUES (
@@ -198,7 +198,7 @@ INSERT INTO expense VALUES (
 'daniel',
 'Farmácia',
 10,
-'17/03/2023'
+'2023-03-17'
 );
 
 INSERT INTO expense VALUES (
@@ -206,7 +206,7 @@ INSERT INTO expense VALUES (
 'yowgf',
 'wasting money',
 999.99,
-'24/03/2023'
+'2023-03-24'
 );
 
 ----Add expenses tag-----

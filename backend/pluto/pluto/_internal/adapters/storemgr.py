@@ -22,6 +22,7 @@ class SQLStorageManager(Database):
         super().__init__(cfg)
 
     def insert(self, table: str, colvals: dict[str, Any]) -> List[Dict[str, Any]]:
+        print(f"Inserting into table {table} the vals {colvals}")
         if len(colvals) == 0:
             return list()
         colstr = ""
@@ -142,7 +143,7 @@ class PGSQLStorageManager(SQLStorageManager):
 
     # Methods that must be overriden
     def query(self, q: str) -> List[Dict[str, Any]]:
-        logger.debug("Querying database with string: {}".format(q))
+        print("Querying database with string: {}".format(q))
         if not self._conn:
             raise ValueError(
                 "Database has no connection! Must explicit call connect() before queries!"
@@ -174,7 +175,7 @@ class PGSQLStorageManager(SQLStorageManager):
         return rows_dicts
 
     def connect(self):
-        logger.debug(f"Connecting to {self._cfg.dbname}")
+        print(f"Connecting to {self._cfg.dbname}")
         self._conn = psycopg2.connect(self._connstr)
 
     def close_conn(self):

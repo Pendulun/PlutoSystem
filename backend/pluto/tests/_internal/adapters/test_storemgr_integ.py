@@ -2,22 +2,10 @@ import psycopg2
 import pytest
 
 
-from pluto._internal.adapters.storemgr import PGSQLStorageManager
-
 class TestStorageManager:
     @pytest.fixture
-    def real_storemgr(self, basic_config, setup_real_pg):
-        storemgr = PGSQLStorageManager(basic_config)
-        storemgr._conn = psycopg2.connect(**setup_real_pg.dsn())
-        return storemgr
-
-    @pytest.fixture
-    def real_storemgr_configured(self, real_storemgr):
-        real_storemgr.create_table("users", dict(
-            id="char(32)",
-            first_name="char(32)",
-            last_name="char(32)",
-        ))
+    def real_storemgr_configured(self, real_storemgr, users_table):
+        real_storemgr.create_table("users", users_table)
         return real_storemgr
 
     @pytest.mark.integtest
@@ -37,8 +25,9 @@ class TestStorageManager:
         real_storemgr_configured.insert("users", putin_user)
         real_storemgr_configured.insert("users", bj_user)
         expected = [
-            {"id": "putin", "first_name": "vladimir", "last_name": "putin"},
-            {"id": "bj", "first_name": "b", "last_name": "j"},
+            {"id": "putin", "name": "vladimir putin", "email": "putin@russia.ru",
+             "password": "123"},
+            {"id": "bj", "name": "b j", "email": "bj@b.j", "password": "321"},
         ]
         actual = real_storemgr_configured.select_star("users")
         assert actual == expected

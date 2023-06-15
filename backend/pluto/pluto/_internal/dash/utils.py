@@ -49,7 +49,7 @@ class DashCallbacksUtil:
                 obj.exp_date if isinstance(obj, Expense) else obj.inc_date
             )
             if isinstance(obj_date, str):
-                obj_date = datetime.strptime(obj_date, "%d/%m/%Y")
+                obj_date = datetime.strptime(obj_date, "%Y-%m-%d")
 
             curr_month = obj_date.month
             curr_year = obj_date.year

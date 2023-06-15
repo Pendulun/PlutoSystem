@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 import psycopg2
 import pytest
 
+from pluto._internal.adapters.storemgr import PGSQLStorageManager
 from pluto._internal.config.config import Config
 
 @pytest.fixture
@@ -71,17 +72,83 @@ def setup_real_pg():
         yield postgresql
 
 @pytest.fixture
+def real_storemgr(basic_config, setup_real_pg):
+    storemgr = PGSQLStorageManager(basic_config)
+    storemgr._conn = psycopg2.connect(**setup_real_pg.dsn())
+    yield storemgr
+
+@pytest.fixture
+def real_storemgr_configured(
+        real_storemgr,
+        putin_user,
+        bj_user,
+        users_table,
+        income_table,
+        expense_table,
+        expense_tag_table,
+):
+    # Create default tables
+    real_storemgr.create_table("users", users_table)
+    real_storemgr.create_table("income", income_table)
+    real_storemgr.create_table("expense", expense_table)
+    real_storemgr.create_table("expense_tag", expense_tag_table)
+
+    # Add some default users to facilitate testing
+    real_storemgr.insert("users", putin_user)
+    real_storemgr.insert("users", bj_user)
+
+    yield real_storemgr
+
+@pytest.fixture
+def users_table():
+    return dict(
+        id="char(32)",
+        name="char(32)",
+        email="char(64)",
+        password="char(32)",
+    )
+
+@pytest.fixture
+def income_table():
+    return dict(
+        id="char(32)",
+        user_id="char(32)",
+        src="char(32)",
+        amount="real",
+        inc_date="date",
+    )
+
+@pytest.fixture
+def expense_table():
+    return dict(
+        id="char(32)",
+        user_id="char(32)",
+        src="char(32)",
+        amount="real",
+        exp_date="date",
+    )
+
+@pytest.fixture
+def expense_tag_table():
+    return dict(
+        expense_id="char(32)",
+        tag_name="char(32)",
+    )
+
+@pytest.fixture
 def putin_user():
     return dict(
         id="putin",
-        first_name="vladimir",
-        last_name="putin",
+        name="vladimir putin",
+        email="putin@russia.ru",
+        password="123"
     )
 
 @pytest.fixture
 def bj_user():
     return dict(
         id="bj",
-        first_name="b",
-        last_name="j",
+        name="b j",
+        email="bj@b.j",
+        password="321",
     )

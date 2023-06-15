@@ -25,21 +25,21 @@ class TestDashCallbacksUtil:
             'user_id': '1',
             'src': 'EPA',
             'amount': 10,
-            'exp_date': '01/01/2023'
+            'exp_date': '2023-01-01'
         }
         exp2_dict = {
             'id': '2',
             'user_id': '1',
             'src': 'Padaria 24 horas',
             'amount': 15,
-            'exp_date': '01/02/2023'
+            'exp_date': '2023-02-01'
         }
         exp3_dict = {
             'id': '3',
             'user_id': '1',
             'src': 'Farmácia',
             'amount': 5,
-            'exp_date': '01/03/2023'
+            'exp_date': '2023-03-01'
         }
         exp1 = Expense.from_complete_dict(exp1_dict)
         exp2 = Expense.from_complete_dict(exp2_dict)

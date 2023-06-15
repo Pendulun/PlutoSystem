@@ -3,6 +3,9 @@ from typing import Any, Dict, List
 from pluto._internal.domain.model.income import Income
 from pluto._internal.domain.ports.database import Database
 from pluto._internal.domain.ports.income_service import IIncomeService
+from pluto._internal.log import log
+
+logger = log.logger()
 
 
 class IncomeServiceImpl(IIncomeService):
@@ -24,6 +27,7 @@ class IncomeServiceImpl(IIncomeService):
         return incomes
 
     def add_income(self, income_dict: dict) -> None:
+        print(f"Adding income {income_dict}")
         income = Income.new(**income_dict)
         self._sm.insert(IncomeServiceImpl._income_table, income.dict())
 
@@ -34,7 +38,8 @@ class IncomeServiceImpl(IIncomeService):
         """
         income_dicts: List[dict] = []
         contents = open(file_path).read()
-        lines = contents.split("\n")
+        lines = [line for line in contents.split("\n") if line != ""]
+        print(f"Read following lines from file {file_path}: {lines}")
         for i in range(len(lines)):
             row = lines[i]
             by_semicol = row.split(";")
@@ -43,7 +48,7 @@ class IncomeServiceImpl(IIncomeService):
                 raise ValueError(
                     f"Row {i} of income file has invalid number of "
                     + f"elements. Expected {num_elems}, got "
-                    + "{len_bysemicol}"
+                    + f"{len(by_semicol)}"
                 )
             income_dicts.append(
                 dict(
