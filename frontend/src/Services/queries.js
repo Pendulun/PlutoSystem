@@ -57,6 +57,15 @@ export const useQueryListExpensesTag = (userId, tag = '') =>
         .catch(result => result)
   )
 
+export const useMutationAddIncome = () =>
+  useMutation(
+    data =>
+      axios
+        .post(`${BASE_URL}/incomes/`, data)
+        .then(result => result.data)
+        .catch(result => result)
+  )
+
 export const useMutationUploadIncomes = (userId) =>
   useMutation(
     data =>
