@@ -4,7 +4,7 @@ import { ImportButton, Loading } from '../../Components'
 import { useMutationUploadExpenses, useQueryListExpensesTag } from '../../Services/queries'
 import { ListItemExpense } from '../Home/Components/ListItem'
 import { IconDeletarConta } from '../Perfil/components/Icons/opcoes_estaticas.js'
-import { TagButton } from './Components/TagButton/TagButton'
+import { TagButton } from './components/TagButton/TagButton'
 
 export const Despesas = () => {
   const [file, setFile] = useState()
