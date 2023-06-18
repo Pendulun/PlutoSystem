@@ -14,11 +14,9 @@ const queryClient = new QueryClient()
 const isLogged = (window.location.pathname === '/cadastro' || window.location.pathname === '/') ? false : true
 
 root.render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Toaster/>
-      {isLogged && <TabBar/>}
-      <App />
-    </QueryClientProvider>
-  </React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <Toaster/>
+    {isLogged && <TabBar/>}
+    <App />
+  </QueryClientProvider>
 )

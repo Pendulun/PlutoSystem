@@ -66,6 +66,15 @@ export const useMutationUploadIncomes = (userId) =>
         .catch(result => result)
   )
 
+export const useMutationAddExpense = () =>
+  useMutation(
+    data =>
+      axios
+        .post(`${BASE_URL}/expenses/`, data)
+        .then(result => result.data)
+        .catch(result => result)
+  )
+
 export const useMutationUploadExpenses = (userId) =>
   useMutation(
     data =>
