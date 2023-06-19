@@ -23,7 +23,7 @@ logger = log.logger()
 # Based on:
 # https://dev.to/nandamtejas/implementing-flask-application-using-object-oriented-programming-oops-5cb
 # https://dev.to/nandamtejas/implementing-flask-application-using-object-oriented-programming-oops-part-2-4507
-def make_flask_server(config: Config, database: Database) -> Server:
+def make_flask_server(config: Config, database: Database) -> FlaskServerWrapper:
     flask_app = Flask("pluto")
     CORS(flask_app, resources={r"/*": {"origins": "*"}})
 
@@ -218,13 +218,17 @@ class FlaskServerWrapper(Server):
             return dump_resp()
 
         expense_service = ExpenseServiceImpl(Server.DB_IMP)
+        callback_msg = ""
         try:
             user_id = request.form["user_id"]
             expense_service.add_expense_from_file(file_path=fpath, user_id=user_id)
+            callback_msg="Arquivo processado com sucesso!"
         except Exception as e:
             logger.error(f"Unable to add expense: {e}")
+            print(e)
+            callback_msg="Erro ao processar o arquivo!"
         finally:
-            return dump_resp()
+            return dump_resp(callback_msg)
 
     def list_income(self):
         args = request.args
@@ -250,14 +254,18 @@ class FlaskServerWrapper(Server):
             return dump_resp()
 
         income_service = IncomeServiceImpl(Server.DB_IMP)
+        callback_msg = ""
         try:
             income_service.add_income_from_file(
                 file_path=fpath, user_id=request.form["user_id"]
             )
+            callback_msg="Arquivo processado com sucesso!"
         except Exception as e:
             logger.error(f"Unable to add income: {e}")
+            print(e)
+            callback_msg="Erro ao processar o arquivo!"
         finally:
-            return dump_resp()
+            return dump_resp(callback_msg)
 
     def get_user(self):
         args = request.args
@@ -268,8 +276,18 @@ class FlaskServerWrapper(Server):
     def add_user(self):
         user_dict = request.get_json(force=True)
         user_service = UserServiceImpl(Server.DB_IMP)
-        user_service.add_user(user_dict)
-        return dump_resp()
+        callback_message = ""
+        try:
+            user_service.add_user(user_dict)
+            #Usuário está escrito errado propositalmente para 
+            #poder testar a versão em bytes dessa mensagem
+            callback_message = "Usuario adicionado com sucesso!"
+        except Exception as e:
+            logger.error(f"Unable to add user: {e}")
+            print(e)
+            callback_message = "Erro ao adicionar usuario!"
+        finally:
+            return dump_resp(callback_message)
 
     # Based on: https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
     def _upload_file_from_request(self, request: Request) -> Union[str, None]:
