@@ -26,6 +26,14 @@ INSERT INTO users VALUES (
   'dan@gg.com'
 );
 
+-- Leticia
+INSERT INTO users VALUES (
+  'leticia',
+  'Leticia Alves',
+  'leticia@email.com',
+  '123'
+);
+
 ---- Add incomes
 -- Putin
 INSERT INTO income VALUES (

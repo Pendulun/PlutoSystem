@@ -19,12 +19,12 @@ _build_bootstrap_image:
 	  -t db-bootstrap
 
 start: _build_bootstrap_image
-	$(COMPLETE_SETENV) docker-compose -f $(HELPERS)/docker-compose.yaml \
+	$(COMPLETE_SETENV) docker compose -f $(HELPERS)/docker-compose.yaml \
 	  up -d
 	$(COMPLETE_SETENV) python $(SERVER_DIR_PATH)/main.py
 
 stop:
-	$(BASE_SETENV) docker-compose -f $(HELPERS)/docker-compose.yaml \
+	$(BASE_SETENV) docker compose -f $(HELPERS)/docker-compose.yaml \
 	  down --remove-orphans
 
 restart: stop start
