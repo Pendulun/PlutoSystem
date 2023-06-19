@@ -2,15 +2,22 @@ on:
   push:
     paths:
       - frontend/**
-      - .github/workflows/frontend-check.yaml
+      - .github/workflows/**
   workflow_dispatch:
+
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: make -C frontend ci/check
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: E2E tests
+        run: |
+          docker run \
+            --entrypoint bash \
+            -v "$PWD":/root \
+            --workdir /root \
+            yowgf/cypress-with-python:v0.0.1 \
+            -c "$(cat ./.github/workflows/frontend-check-entrypoint.sh)"

@@ -1,3 +1,5 @@
-ci/check:
-# TODO
-	echo Successful
+install:
+	pnpm install
+
+ci/check: install
+	pnpm cypress run
