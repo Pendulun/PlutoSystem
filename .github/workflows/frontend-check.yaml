@@ -2,7 +2,7 @@ on:
   push:
     paths:
       - frontend/**
-      - .github/workflows/frontend-check.yaml
+      - .github/workflows/**
   workflow_dispatch:
 
 
