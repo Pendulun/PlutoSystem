@@ -19,4 +19,4 @@ jobs:
             -v "$PWD":/root \
             --workdir /root \
             yowgf/cypress-with-python:v0.0.1 \
-            -c "$(cat frontend-check-entrypoint.sh)"
+            -c "$(cat ./.github/workflows/frontend-check-entrypoint.sh)"
