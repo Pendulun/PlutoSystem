@@ -21,9 +21,5 @@ describe('Testando adicionar uma despesa diretamente', () => {
 
     cy.contains('Brinquedo para gatos').should('be.visible')
     cy.contains('- R$ 15').should('be.visible')
-    
-    //cy.get('[data-cy="name"]').should('contain', 'Leticia Alves')
-    //cy.get('[data-cy="email"]').should('contain', 'leticia@email.com')
-
   })
 })
