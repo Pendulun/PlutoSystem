@@ -9,8 +9,16 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
         with:
-          node-version: 18
-      - run: make -C frontend ci/check
+          version: 7
+
+      - name: E2E tests
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: frontend
+          build: npx cypress info
