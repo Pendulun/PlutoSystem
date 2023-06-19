@@ -18,4 +18,63 @@ jobs:
           version: 7
 
       - name: E2E tests
-        run: make -C frontend ci/check
+        run: |
+          docker run --entrypoint bash --workdir /root \
+            yowgf/cypress-with-python:v0.0.1 -c '
+
+          export PYTHON=python3.10
+
+          # # Install docker
+          # apt-get install ca-certificates curl gnupg
+          # install -m 0755 -d /etc/apt/keyrings
+          # curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+          # chmod a+r /etc/apt/keyrings/docker.gpg
+          # echo \
+          #     "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+          #     "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+          #     tee /etc/apt/sources.list.d/docker.list > /dev/null
+          # apt-get update
+          # apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+          # Missing dependencies
+          apt-get install -y libpq-dev postgresql-contrib lsb-release sudo
+          echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
+          > /etc/apt/sources.list.d/pgdg.list
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+          apt-get update
+          apt-get install -y postgresql-13
+          $PYTHON -m pip install poetry
+          chown -R postgres .
+
+          su -p postgres
+          pg_ctlcluster 13 main start
+          psql -c "ALTER USER postgres PASSWORD \'changeme\';"
+          cd /root/helpers/bootstrap
+          ./bootstrap_local.sh
+          cd ../../
+
+          # Start backend
+          cd backend/pluto
+          $PYTHON -m poetry env use 3.10
+          . .venv/bin/activate
+          poetry install
+          export HOST=localhost
+          export PORT=5000
+          export DB_USER=postgres
+          export DB_PASSWORD=changeme
+          export DB_HOST=localhost
+          export DB_PORT=5432
+          export DB_NAME=pluto
+          nohup python3 pluto/main.py &
+          cd ../../
+
+          # Start frontend
+          cd frontend
+          unset PORT
+          pnpm install
+          nohup pnpm start &
+
+          # Run cypress
+          npm run env -- cypress install
+          npm run env -- cypress run
+          '
