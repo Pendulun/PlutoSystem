@@ -30,7 +30,7 @@ class ExpenseServiceImpl(IExpenseService):
                 join_condition=("id", "expense_id"),
                 and_conditions=filters,
             )
-        
+
         expenses = []
         if expense_dicts is not None:
             expenses = [Expense(**d) for d in expense_dicts]
