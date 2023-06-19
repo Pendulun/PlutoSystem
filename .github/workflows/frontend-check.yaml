@@ -18,7 +18,4 @@ jobs:
           version: 7
 
       - name: E2E tests
-        uses: cypress-io/github-action@v2
-        with:
-          working-directory: frontend
-          build: npx cypress info
+        run: make -C frontend ci/check
