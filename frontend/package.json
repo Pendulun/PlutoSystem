@@ -9,6 +9,7 @@
     "axios": "^1.4.0",
     "create-react-context": "^0.3.0",
     "cypress": "^12.14.0",
+    "postcss-custom-properties-fallback": "^1.0.2",
     "prettier": "^2.8.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -17,6 +18,7 @@
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "react-spinners": "^0.13.8",
+    "react-spring-bottom-sheet": "^3.4.1",
     "styled-components": "^5.3.9",
     "web-vitals": "^3.3.1"
   },
