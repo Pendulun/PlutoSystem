@@ -10,7 +10,6 @@ describe('Testando se o botão de sair do perfil leva novamente à tela de login
     cy.get('[data-cy="name"]').should('contain', 'Leticia Alves')
     cy.get('[data-cy="email"]').should('contain', 'leticia@email.com')
 
-
     // Verificar se o botão de sair existe e clicar nele
     cy.get('button').then(($button) => {
       if ($button.length) {
