@@ -147,3 +147,8 @@ class TestFlaskServer:
         new_user = {"email": "putin@ru.com"}
         response = client.post("/users/", json=new_user)
         assert b"Erro ao adicionar usuario!" in response.data
+    
+    def test_add_valid_expense_without_tag(self, client:FlaskClient):
+        new_expense = {"user_id":"daniel", "src":"EPA", "amount":20}
+        response = client.post("/expenses/", json=new_expense)
+        assert b"Despesa adicionada com sucesso!" in response.data
