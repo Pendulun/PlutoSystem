@@ -44,6 +44,12 @@ class ExpenseServiceImpl(IExpenseService):
 
     def add_expense_from_dict_without_id(self, expense_dict: dict) -> str:
         "Returns the expense id"
+        curr_amount = expense_dict["amount"]
+        if isinstance(curr_amount, str):
+            curr_amount = curr_amount.replace(",", ".")
+         
+        expense_dict["amount"] = float(curr_amount)
+
         expense = Expense.new(**expense_dict)
         self.add_expense(expense)
         return expense.id

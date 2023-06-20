@@ -164,6 +164,11 @@ class TestFlaskServer:
         response = client.post("/expenses/", json=new_expense)
         assert b"Erro ao adicionar despesa!" in response.data
     
+    def test_add_expense_invalid_amount_without_tag(self, client:FlaskClient):
+        new_expense = {"user_id":"daniel", "src":"Araujo", "amount":"aaa"}
+        response = client.post("/expenses/", json=new_expense)
+        assert b"Erro ao adicionar despesa!" in response.data
+    
     def test_add_valid_expense_with_invalid_tag(self, client:FlaskClient):
         new_expense = {"user_id":"daniel", "src":"EPA", "amount":20, "tag_name":None}
         response = client.post("/expenses/", json=new_expense)
