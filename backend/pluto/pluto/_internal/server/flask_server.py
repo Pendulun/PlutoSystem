@@ -254,8 +254,17 @@ class FlaskServerWrapper(Server):
     def add_income(self):
         income_dict = request.get_json(force=True)
         income_service = IncomeServiceImpl(Server.DB_IMP)
-        income_service.add_income(income_dict)
-        return dump_resp()
+        callback_msg = ""
+        try:
+            income_service.add_income(income_dict)
+        except Exception as e:
+            logger.error(f"Unable to add expense: {e}")
+            print(e)
+            callback_msg = "Erro ao adicionar receita!"
+        else:
+            callback_msg = "Receita adicionada com sucesso!"
+        finally:
+            return dump_resp(callback_msg)
 
     def income_file_upload(self):
         if request.method != "POST":

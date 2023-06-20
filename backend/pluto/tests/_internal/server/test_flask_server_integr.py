@@ -173,3 +173,8 @@ class TestFlaskServer:
         new_expense = {"user_id":"daniel", "src":"EPA", "amount":20, "tag_name":" Mercado "}
         response = client.post("/expenses/", json=new_expense)
         assert b"Despesa adicionada com sucesso!" in response.data
+    
+    def test_add_valid_income(self, client:FlaskClient):
+        new_income = {"user_id":"daniel", "src":"Salario", "amount":1000}
+        response = client.post("/incomes/", json=new_income)
+        assert b"Receita adicionada com sucesso!" in response.data
