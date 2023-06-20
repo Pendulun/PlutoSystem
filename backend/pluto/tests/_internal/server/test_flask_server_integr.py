@@ -183,3 +183,9 @@ class TestFlaskServer:
         new_income = {"user_id":"daniel", "src":"Salario", "amount": "aaa"}
         response = client.post("/incomes/", json=new_income)
         assert b"Erro ao adicionar receita!" in response.data
+    
+    def test_add_income_missing_info(self, client:FlaskClient):
+        # Falta a informação de src
+        new_income = {"user_id":"daniel", "amount": "aaa"}
+        response = client.post("/incomes/", json=new_income)
+        assert b"Erro ao adicionar receita!" in response.data
