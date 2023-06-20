@@ -1,14 +1,15 @@
 from multiprocessing import Process
-import os
-import signal
-
 import pytest
-
+import pathlib
 
 from pluto._internal.server.flask_server import make_flask_server, FlaskServerWrapper
 from tests._internal.mocks import ConfigMock, DatabaseMock
-import random
-import requests
+
+from werkzeug.datastructures import FileStorage
+from flask.testing import FlaskClient
+
+test_files_path = pathlib.Path(__file__).parent / "test_files"
+
 
 class ParallelServer(FlaskServerWrapper):
     def __init__(self, srv):
@@ -36,8 +37,10 @@ class TestFlaskServer:
         return ParallelServer(srv)
 
     @pytest.fixture
-    def client(self):
+    def client(self) -> FlaskClient:
         srv = make_flask_server(ConfigMock.parse(), DatabaseMock(ConfigMock.parse()))
+        # Based on https://flask.palletsprojects.com/en/2.3.x/testing/
+        srv.app.config.update({"TESTING":True})
         with srv.app.test_client() as c:
             yield c
 
@@ -66,26 +69,81 @@ class TestFlaskServer:
 
         server._upload_file_from_request(Request("tests/fixtures/valid_incomes.csv"))
 
-    def test_list_incomes(self, client):
-        client.post("/incomes/", data={"user_id": "putin"})
-        incomes = client.get("/incomes/")
+    def test_list_incomes(self, client:FlaskClient):
+        incomes = client.get("/incomes/", query_string={"user_id": "putin"})
         print(incomes)
 
-    def test_income_upload(self, client):
-        # TODO: Properly test file upload. I found an example at
+    def test_valid_income_upload(self, client:FlaskClient):
+        # Based on
         # https://stackoverflow.com/questions/35684436/testing-file-uploads-in-flask
-        client.post("/upload/incomes/", data={})
+        my_file = FileStorage(
+            stream=open(test_files_path / "test_incomes1.csv", "rb"),
+            filename="test_incomes1.csv",
+            content_type="text/csv",
+        )
 
-    def test_expense_upload(self, client):
-        # TODO: properly test file upload
-        client.post("/upload/expenses/", data={})
+        data = dict()
+        data['file'] = my_file
+        data['user_id'] = "daniel"
+        response = client.post("/upload/incomes/", data=data)
+        assert b"Arquivo processado com sucesso!" in response.data
+    
+    def test_invalid_income_upload(self, client:FlaskClient):
+        # Based on
+        # https://stackoverflow.com/questions/35684436/testing-file-uploads-in-flask
+        my_file = FileStorage(
+            stream=open(test_files_path / "test_incomes2.csv", "rb"),
+            filename="test_incomes2.csv",
+            content_type="text/csv",
+        )
 
-    def test_list_expenses(self, client):
+        data = dict()
+        data['file'] = my_file
+        data['user_id'] = "daniel"
+        response = client.post("/upload/incomes/", data=data)
+        assert b"Erro ao processar o arquivo!" in response.data
+
+    def test_valid_expense_upload(self, client:FlaskClient):
+        my_file = FileStorage(
+            stream=open(test_files_path / "test_expenses1.csv", "rb"),
+            filename="test_expenses1.csv",
+            content_type="text/csv",
+        )
+        
+        data = dict()
+        data['file'] = my_file
+        data['user_id'] = "daniel"
+        response = client.post("/upload/expenses/", data=data)
+        assert b"Arquivo processado com sucesso!" in response.data
+
+    def test_invalid_expense_upload(self, client:FlaskClient):
+        my_file = FileStorage(
+            stream=open(test_files_path / "test_expenses2.csv", "rb"),
+            filename="test_expenses2.csv",
+            content_type="text/csv",
+        )
+        
+        data = dict()
+        data['file'] = my_file
+        data['user_id'] = "daniel"
+        response = client.post("/upload/expenses/", data=data)
+        assert b"Erro ao processar o arquivo!" in response.data
+
+    def test_list_expenses(self, client:FlaskClient):
         client.post("/expenses/", data={"user_id": "putin"})
-        expenses = client.get("/expenses/")
-        print(expenses)
+        response = client.get("/expenses/")
+        print(response.data)
 
-    def test_get_user(self, client):
-        client.post("/users/", data={"email": "putin@massacre.death"})
-        client.get("/users/", data={"email": "putin@massacre.death"})
-
+    def test_get_user(self, client:FlaskClient):
+        new_user = {"email": "putin@ru.com","name":"putin","password":"123"}
+        response = client.post("/users/", json=new_user)
+        assert b"Usuario adicionado com sucesso!" in response.data
+        response = client.get("/users/", query_string={"email": "putin@ru.com"})
+        # Já que não temos conexão real com o bd
+        assert b'null' in response.data
+    
+    def test_add_invalid_user(self, client:FlaskClient):
+        #Faltam informações de email e password para o usuário
+        new_user = {"email": "putin@ru.com"}
+        response = client.post("/users/", json=new_user)
+        assert b"Erro ao adicionar usuario!" in response.data

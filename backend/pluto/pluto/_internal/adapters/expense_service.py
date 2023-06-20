@@ -31,7 +31,10 @@ class ExpenseServiceImpl(IExpenseService):
                 and_conditions=filters,
             )
 
-        expenses = [Expense(**d) for d in expense_dicts]
+        expenses = []
+        if expense_dicts is not None:
+            expenses = [Expense(**d) for d in expense_dicts]
+
         resp = {
             "expenses": expenses,
             "filters": filters,

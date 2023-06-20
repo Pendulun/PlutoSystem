@@ -22,7 +22,9 @@ class IncomeServiceImpl(IIncomeService):
                 and_conditions=filters,
             )
 
-        incomes = [Income(**d) for d in income_dicts]
+        incomes = []
+        if income_dicts is not None:
+            incomes = [Income(**d) for d in income_dicts]
 
         return incomes
 
