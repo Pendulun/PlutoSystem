@@ -201,11 +201,20 @@ class FlaskServerWrapper(Server):
             del expense_dict["tag_name"]
 
         expense_service = ExpenseServiceImpl(Server.DB_IMP)
-        exp_id = expense_service.add_expense_from_dict_without_id(expense_dict)
-        if tag is not None:
-            expense_service.add_tag_for_expense(tag, exp_id)
-
-        return dump_resp()
+        callback_msg = ""
+        try:
+            exp_id = expense_service.add_expense_from_dict_without_id(expense_dict)
+            if tag is not None:
+                expense_service.add_tag_for_expense(tag, exp_id)
+            
+        except Exception as e:
+            logger.error(f"Unable to add expense: {e}")
+            print(e)
+            callback_msg = "Erro ao adicionar despesa!"
+        else:
+            callback_msg = "Despesa adicionada com sucesso!"
+        finally:
+            return dump_resp(callback_msg)
 
     def expense_file_upload(self):
         if request.method != "POST":
