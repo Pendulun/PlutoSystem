@@ -194,19 +194,24 @@ class FlaskServerWrapper(Server):
 
     def add_expense(self):
         incoming_dict = request.get_json(force=True)
-        tag = incoming_dict["tag_name"] if "tag_name" in incoming_dict else None
+        tag: Union[str, None] = (
+            incoming_dict["tag_name"] if "tag_name" in incoming_dict else None
+        )
+
         expense_dict = dict(incoming_dict)
+        if "tag_name" in expense_dict:
+            del expense_dict["tag_name"]
 
         if tag is not None:
-            del expense_dict["tag_name"]
+            tag = tag.strip()
 
         expense_service = ExpenseServiceImpl(Server.DB_IMP)
         callback_msg = ""
         try:
             exp_id = expense_service.add_expense_from_dict_without_id(expense_dict)
-            if tag is not None:
+            if tag is not None and len(tag) > 0:
                 expense_service.add_tag_for_expense(tag, exp_id)
-            
+
         except Exception as e:
             logger.error(f"Unable to add expense: {e}")
             print(e)
