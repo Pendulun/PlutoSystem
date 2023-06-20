@@ -33,7 +33,7 @@ class IncomeServiceImpl(IIncomeService):
         curr_amount = income_dict["amount"]
         if isinstance(curr_amount, str):
             curr_amount = curr_amount.replace(",", ".")
-         
+
         income_dict["amount"] = float(curr_amount)
         income = Income.new(**income_dict)
         self._sm.insert(IncomeServiceImpl._income_table, income.dict())

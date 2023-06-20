@@ -47,7 +47,7 @@ class ExpenseServiceImpl(IExpenseService):
         curr_amount = expense_dict["amount"]
         if isinstance(curr_amount, str):
             curr_amount = curr_amount.replace(",", ".")
-         
+
         expense_dict["amount"] = float(curr_amount)
 
         expense = Expense.new(**expense_dict)
@@ -68,17 +68,17 @@ class ExpenseServiceImpl(IExpenseService):
             user_id, file
         )
 
-        for expense, tags in expenses_and_tags_to_add:
-            self.add_expense(expense)
+        for expense_dict, tags in expenses_and_tags_to_add:
+            expense_id = self.add_expense_from_dict_without_id(expense_dict)
             for tag in tags:
-                self.add_tag_for_expense(tag, expense.id)
+                self.add_tag_for_expense(tag, expense_id)
 
     def _extract_expenses_and_tags_from_file(
         self, user_id, file
-    ) -> List[Tuple[Expense, List[str]]]:
+    ) -> List[Tuple[dict, List[str]]]:
         """
         Returns a list of tuples of form: ((1), (2))
-            (1) An Expense instance
+            (1) A Expense dict
             (2) A list of tags
         """
         expenses_and_tags_to_add = list()
@@ -99,9 +99,7 @@ class ExpenseServiceImpl(IExpenseService):
                     tags = list(filter(lambda a: len(a.strip()) > 0, tags))
 
                 expense_dict = self._expense_dict_from_row(user_id, expense_row)
-                expense = Expense.new(**expense_dict)
-
-                expense_and_its_tags = (expense, tags)
+                expense_and_its_tags = (expense_dict, tags)
                 expenses_and_tags_to_add.append(expense_and_its_tags)
 
         return expenses_and_tags_to_add
