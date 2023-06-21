@@ -164,6 +164,11 @@ class TestFlaskServer:
         response = client.post("/expenses/", json=new_expense)
         assert b"Erro ao adicionar despesa!" in response.data
     
+    def test_add_expense_invalid_amount_without_tag(self, client:FlaskClient):
+        new_expense = {"user_id":"daniel", "src":"Araujo", "amount":"aaa"}
+        response = client.post("/expenses/", json=new_expense)
+        assert b"Erro ao adicionar despesa!" in response.data
+    
     def test_add_valid_expense_with_invalid_tag(self, client:FlaskClient):
         new_expense = {"user_id":"daniel", "src":"EPA", "amount":20, "tag_name":None}
         response = client.post("/expenses/", json=new_expense)
@@ -173,3 +178,19 @@ class TestFlaskServer:
         new_expense = {"user_id":"daniel", "src":"EPA", "amount":20, "tag_name":" Mercado "}
         response = client.post("/expenses/", json=new_expense)
         assert b"Despesa adicionada com sucesso!" in response.data
+    
+    def test_add_valid_income(self, client:FlaskClient):
+        new_income = {"user_id":"daniel", "src":"Salario", "amount":1000}
+        response = client.post("/incomes/", json=new_income)
+        assert b"Receita adicionada com sucesso!" in response.data
+    
+    def test_add_income_invalid_amount(self, client:FlaskClient):
+        new_income = {"user_id":"daniel", "src":"Salario", "amount": "aaa"}
+        response = client.post("/incomes/", json=new_income)
+        assert b"Erro ao adicionar receita!" in response.data
+    
+    def test_add_income_missing_info(self, client:FlaskClient):
+        # Falta a informação de src
+        new_income = {"user_id":"daniel", "amount": "aaa"}
+        response = client.post("/incomes/", json=new_income)
+        assert b"Erro ao adicionar receita!" in response.data

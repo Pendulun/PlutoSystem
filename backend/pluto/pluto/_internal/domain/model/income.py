@@ -12,13 +12,13 @@ class Income:
     id: str
     user_id: str
     src: str
-    amount: int
+    amount: float
     inc_date: str
 
     dict = asdict
 
     @staticmethod
-    def new(user_id: str, src: str, amount: int) -> Income:
+    def new(user_id: str, src: str, amount: float) -> Income:
         curr_date = datetime.today().strftime("%Y-%m-%d")
         return Income(new_id(), user_id, src, amount, curr_date)
 
