@@ -46,7 +46,7 @@ export const Rendas = () => {
 
     addIncome.mutate( data, {
       onSuccess: () => {
-        toast.success('Despesa adicionada com sucesso', { duration: 5000})
+        toast.success('Renda adicionada com sucesso', { duration: 5000})
         setTimeout(reloadPage, 2600)
         setOpen(false)
       },
@@ -110,7 +110,7 @@ export const Rendas = () => {
       <div class="grid grid-cols-1 md:grid-cols-2 mx-auto gap-8 mt-[60px] content-center items-center justify-center">
         <div class="">          
           <div class="w-full p-5 bg-white rounded-xl flex items-center justify-center">
-            <iframe src={`http://localhost:5000/dash_incomes/${user?.id}`} title='plot view' width={1000} height={450}/>
+            <iframe data-cy="the-frame" src={`http://localhost:5000/dash_incomes/${user?.id}`} title='plot view' width={1000} height={450}/>
           </div>
         </div>
 
